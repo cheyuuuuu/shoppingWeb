@@ -1,4 +1,4 @@
-import { Tabs, Flex } from "@chakra-ui/react"
+import { Tabs, Flex, Box, Circle, Float } from "@chakra-ui/react"
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FaAddressCard, FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
@@ -57,9 +57,16 @@ export default function Nav(){
             </Tabs.Trigger>
           </Link>
           <Link href="/shoppingCart" >
-            <Tabs.Trigger value="shoppingCart" padding = "3">
-            <FaShoppingCart />
-            購物車
+            <Tabs.Trigger value="shoppingCart" padding = "1">
+              <FaShoppingCart />
+                購物車
+              <Box position="absolute" top="2" right="0" transform="translate(50%, -50%)">
+                <Float>
+                  <Circle size="4" bg="red" color="white">
+                    0
+                  </Circle>
+                </Float>
+              </Box>
             </Tabs.Trigger>
           </Link>
           <Link href="/demo" >

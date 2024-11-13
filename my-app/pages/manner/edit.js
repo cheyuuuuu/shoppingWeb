@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-
+import { Checkbox } from "@/components/ui/checkbox"
+import { For, Stack, Table, Flex, Input } from "@chakra-ui/react"
+import { Button } from "@/components/ui/button"
+import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
 export default function Edit(){
   const [ commodities, setCommodities ] = useState([]);
@@ -107,46 +110,71 @@ export default function Edit(){
 
   return(
     <div>
-      <h3 style={{padding:10,}}>商品總覽</h3>
-      <table>
-      <thead>
-        <tr style={{padding:10,}}>
-          <th style={{padding:10,}}>商品名稱</th>
-          <th style={{padding:10,}}>商品描述</th>
-          <th style={{padding:10,}}>商品價格</th>
-          <th style={{padding:10,}}>商品庫存</th>
-        </tr>
-      </thead>
-      <tbody>
-        {commodities.map((commodity) =>(
-          <tr key={commodity._id}>
-            <input 
-            type='checkbox'
-            checked = {updates[commodity._id].isSelected || false}
-            onChange = {() => handleCheckBoxCahnge(commodity._id)}>
-            </input>
-            <td style={{padding:10,}}>{commodity.name}</td>
-            <td style={{padding:10,}}>{commodity.description}</td>
-            <td style={{padding:10,}}>
-              <input
-                  type="number"
-                  value={updates[commodity._id]?.price || ''}
-                  onChange={(e) => handleInputChange(commodity._id, 'price', e.target.value)}
-                  disabled={!updates[commodity._id]?.isSelected}/>
-            </td>
-            <td style={{padding:10,}}>
-              <input
-                  type="number"
-                  value={updates[commodity._id]?.number || ''}
-                  onChange={(e) => handleInputChange(commodity._id, 'number', e.target.value)}
-                  disabled={!updates[commodity._id]?.isSelected}/>
-            </td>
-          </tr>
-        ))}
-        </tbody>
-      </table>
-      <button onClick={handleUpdate}>修改</button>
-      <button onClick={handleDelete}>刪除</button>
+    <Stack gap="10">
+      <For each={["outline"]}>
+        {(variant) => (
+          <Table.Root key={variant} size="sm"  variant={variant}  showColumnBorder stickyHeader>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader p={3} textAlign="center" width="5%">勾選欄</Table.ColumnHeader>
+                <Table.ColumnHeader p={3} textAlign="center" width="20%">商品名稱</Table.ColumnHeader>
+                <Table.ColumnHeader p={3} textAlign="center" width="20%">商品描述</Table.ColumnHeader>
+                <Table.ColumnHeader p={3} textAlign="center" width="10%">商品價格</Table.ColumnHeader>
+                
+                <Table.ColumnHeader p={3} textAlign="center" width="10%">商品庫存</Table.ColumnHeader>
+                
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {commodities.map((commodity) => (
+                <Table.Row key={commodity.id}>
+                  <Flex align="center" justify="center" w="100%" h="100%" marginTop="4" >
+                    <Checkbox
+                    variant="subtle"
+                    colorPalette="gray"
+                    type='checkbox'
+                    size='md'
+                    checked = {updates[commodity._id].isSelected || false}
+                    onChange = {() => handleCheckBoxCahnge(commodity._id)}>
+                    </Checkbox>
+                  </Flex>
+                  <Table.Cell textAlign="center">{commodity.name}</Table.Cell>
+                  <Table.Cell textAlign="center">{commodity.description}</Table.Cell>
+                  
+                    <Table.Cell p={3} m={1}>
+                      <Input
+                        type="number"
+                        size="xs"
+                        value={updates[commodity._id]?.price || ''}
+                        onChange={(e) => handleInputChange(commodity._id, 'price', e.target.value)}
+                        disabled={!updates[commodity._id]?.isSelected}/>
+                    </Table.Cell>
+                    <Table.Cell p={3} m={1}>
+                      <Input
+                        type="number"
+                        size="xs"
+                        value={updates[commodity._id]?.number || ''}
+                        onChange={(e) => handleInputChange(commodity._id, 'number', e.target.value)}
+                        disabled={!updates[commodity._id]?.isSelected}/>
+                    </Table.Cell>
+                 
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        )}
+      </For>
+      
+    </Stack>
+    <Button onClick={handleUpdate} size="sm" m={5} p={2} variant="surface">
+      <FaEdit />
+      修改
+    </Button>
+    <Button onClick={handleDelete} size="sm" m={5} p={2} variant="surface">
+      <FaTrashAlt />
+      刪除
+    </Button>
     </div>
   );
 }
+  

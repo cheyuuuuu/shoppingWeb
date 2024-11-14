@@ -1,17 +1,15 @@
 .footer{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px; /*設定footer本身高度*/
-  /* margin-top: -50px; 隨footer高度需做調整 */
-  background-color: lightblue;
-  
+  text-align: center;
+  padding: 5px;
+  background-color: rgba(201, 222, 110, 0.851);
+  height: 50px;
 }
 
 .layoutContainer{
   display: flex;
   flex-direction: column;
   min-height: 100vh; 
+ 
    /* 確保頁面至少填滿視窗高度 */
 }
 .mainContent {

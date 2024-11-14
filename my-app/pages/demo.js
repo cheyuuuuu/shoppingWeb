@@ -1,80 +1,77 @@
-import { useState } from 'react';
-import Link from "next/link";
-import { useRouter } from 'next/router';
+import { Badge, Box, HStack, Icon, Image, Text, Stack, Flex } from "@chakra-ui/react"
+import { HiStar } from "react-icons/hi"
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import {
+  BreadcrumbCurrentLink,
+  BreadcrumbRoot,
+} from "@/components/ui/breadcrumb"
 
-import { Button } from "@/components/ui/button"
-import { Button, Input, Stack } from "@chakra-ui/react"
-import { Field } from "@/components/ui/field"
-import { useForm } from "react-hook-form"
+export default function Demo  () {
 
-export default function Register() {
-  const [user, setUser] = useState({ name: '', email: '', password: '', role:'user' });
-  const router = useRouter();
-  
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    for( let i in user ){
-        if (user[i] === ""){
-          alert("還有空格沒輸入！");
-          return;
-        }else break;
+  const [ commodities, setCommodities ] = useState([]);
+  useEffect(() => {
+    const fetchCommodities = async() => {
+      try{
+        const response = await fetch('http://localhost:5000/api/commodities', {
+          method: 'GET',
+          cache: 'no-store'
+        });
+        const data = await response.json();
+        setCommodities(data);
+      }catch(e){
+        console.error('獲取商品資料失敗', e);
       }
-    
+    };
+    fetchCommodities();
+  }, []);
+  //  console.log(commodities[0]._id);
 
-    const response = await fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    });
+  return (
+    <div>
+      <BreadcrumbRoot m={3}>
+        <Link href="/">首頁</Link>
+        <BreadcrumbCurrentLink>商品頁面</BreadcrumbCurrentLink>
+      </BreadcrumbRoot>
+      <Flex wrap="wrap" >
+        {commodities.map((commodity) =>(
+          <Link href={`/commodity/${commodity._id}`}>
+            <Box  key={commodity._id} maxW="sm" borderWidth="1px" p={2} w={200}>
+              <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}${commodity.image.url}`} 
+                    alt={commodity.name}
+                    height="150px"
+                    width={200}
+                    />
+              <Box p="4" spaceY="5">
+                <HStack>
+                  <Badge colorPalette="teal" variant="solid" p="1">
+                  new
+                  </Badge>
+                  <HStack gap="1" fontWeight="medium">
+                    <Icon color="orange.400">
+                      <HiStar />
+                    </Icon>
+                    <Text textStyle="lg">
+                    {commodity.name}
+                    </Text>
+                  </HStack>
+                </HStack>
+                <Text fontWeight="medium" color="fg">
+                {commodity.description}
+                </Text>
+                <HStack color="fg.muted">
+                價格：NTD{commodity.price} 
+                </HStack>
+                <HStack color="fg.muted">
+                庫存：{commodity.number}
+                </HStack>
+              </Box>
+            </Box>
+          </Link>
+        ))}
+      </Flex>
+    </div>
 
-    const data = await response.json();
-    if (response.ok) {
-      console.log('用戶創建成功:', data);
-      setUser({ name: '', email: '', password: '',role:'user' });
-      alert("註冊成功！ 按下確認跳轉至登入")
-      router.push('/members/login');
-    } else {
-      console.error('錯誤:', data);
-      alert(data.message + "！");
-    }
-  };
-
-  return 
-    (
-      <form onSubmit={onSubmit}>
-        <Stack gap="4" align="flex-start" maxW="sm">
-          <Field
-            label="First name"
-            invalid={!!errors.firstName}
-            errorText={errors.firstName?.message}
-          >
-            <Input
-              {...register("firstName", { required: "First name is required" })}
-            />
-          </Field>
-          <Field
-            label="Last name"
-            invalid={!!errors.lastName}
-            errorText={errors.lastName?.message}
-          >
-            <Input
-              {...register("lastName", { required: "Last name is required" })}
-            />
-          </Field>
-          <Button type="submit">Submit</Button>
-        </Stack>
-      </form>
-    )
+  )
 }
 

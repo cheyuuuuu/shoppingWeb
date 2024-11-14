@@ -29,48 +29,48 @@ export default function Nav(){
   };
 
   return (
-    <Tabs.Root defaultValue={activeTab} variant="plain">
-      <Flex justifyContent="flex-end" bg="bg.muted" rounded="l3" p="1" shadow="2px 2px 2px 2px gray">
-        <Tabs.List  className={styles.list }> 
+    <Tabs.Root defaultValue={activeTab} variant="plain" >
+      <Flex justifyContent="flex" bg="#B4A582" rounded="l3" h="60px" pl="2%" pt="3" shadow="2px 2px 2px 2px gray" >
+        <Tabs.List  className={styles.list} > 
           <Link href="/" >
-            <Tabs.Trigger value="home" padding = "3" >
+            <Tabs.Trigger value="home" padding = "3" textStyle= "xl">
             <IoHome />
             首頁
             </Tabs.Trigger>
           </Link>
           <Link href="/about" >
-            <Tabs.Trigger value="about" padding = "3" >
+            <Tabs.Trigger value="about" padding = "3" textStyle= "xl">
             <CiTextAlignCenter />
             關於
             </Tabs.Trigger>
           </Link> 
           <Link href="/commodity"  >
-            <Tabs.Trigger value="commodity" padding = "3" >
+            <Tabs.Trigger value="commodity" padding = "3" textStyle= "xl">
             <PiCoffeeBeanFill />
             商品
             </Tabs.Trigger>
           </Link>
           <Link href="/members"  >
-            <Tabs.Trigger value="members" padding = "3" >
+            <Tabs.Trigger value="members" padding = "3" textStyle= "xl">
             <FaAddressCard />
             會員
             </Tabs.Trigger>
           </Link>
           <Link href="/shoppingCart" >
-            <Tabs.Trigger value="shoppingCart" padding = "1">
+            <Tabs.Trigger value="shoppingCart" padding = "1" textStyle= "xl">
               <FaShoppingCart />
                 購物車
-              <Box position="absolute" top="2" right="0" transform="translate(50%, -50%)">
+              <Box position="absolute" top="1" right="0" transform="translate(50%, -50%)">
                 <Float>
-                  <Circle size="4" bg="red" color="white">
-                    0
+                  <Circle size="5" bg="red" color="white">
+                    1
                   </Circle>
                 </Float>
               </Box>
             </Tabs.Trigger>
           </Link>
           <Link href="/demo" >
-            <Tabs.Trigger value="demo" padding = "3">
+            <Tabs.Trigger value="demo" padding = "3" textStyle= "xl">
             <FaShoppingCart />
             測試
             </Tabs.Trigger>
@@ -78,7 +78,7 @@ export default function Nav(){
           <Tabs.Indicator rounded="l3" />
           {session  ? (
             <div>
-              <Tabs.Trigger value="demo" padding = "3">
+              <Tabs.Trigger value="demo" padding = "3" textStyle= "xl">
               <FaSignOutAlt />
               <button onClick={handleSignOut} >登出</button>
               </Tabs.Trigger>
@@ -90,7 +90,7 @@ export default function Nav(){
             <div>
             {session.user.role === 'admin' && (
                 <Link href="/manner" >
-                <Tabs.Trigger value="manner" padding = "3">
+                <Tabs.Trigger value="manner" padding = "3" textStyle= "xl">
                 <IoDocumentText />
                 管理區
                 </Tabs.Trigger>

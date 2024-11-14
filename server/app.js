@@ -44,6 +44,31 @@ app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 const upload = multer();
 
+// 會員註冊
+app.post('/api/register', async (req, res) => { 
+  // console.log(req.body);
+  const { name, email, password } = req.body;
+  let role = req.body.role || 'user';
+  try {
+    const existingUser = await User.findOne({ email });
+    if(existingUser){
+      return res.status(400).json({ message: '該信箱已被註冊'});
+    }
+    if(name ==='admin'){ //設定管理員
+      role = 'admin';
+    };
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const newUser = new User({ name, email, password: hashedPassword, role });
+
+    await newUser.save();  // 將資料儲存到 MongoDB
+    console.log("資料儲存成功");
+    res.status(201).json({ message: '使用者資料成功存入資料庫', user: newUser });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 //登入
 app.post('/api/login', async (req, res) =>{ 
   const { email, password } = req.body;
@@ -153,6 +178,7 @@ app.delete('/api/delete', async(req, res ) =>{
   }
 })
 
+//獲得商品列表
 app.get('/api/commodities', async (req, res) => {
   try{
     res.set('Cache-Control', 'no-store');
@@ -163,28 +189,19 @@ app.get('/api/commodities', async (req, res) => {
   }
 })
 
-// 會員註冊
-app.post('/api/register', async (req, res) => { 
-  // console.log(req.body);
-  const { name, email, password } = req.body;
-  let role = req.body.role || 'user';
+//獲得單一商品資訊
+app.get('/api/commodity/:id', async(req, res) => {
+  const { id } = req.params;
+  console.log('有接收到請求');
   try {
-    const existingUser = await User.findOne({ email });
-    if(existingUser){
-      return res.status(400).json({ message: '該信箱已被註冊'});
+    const commodity = await Commodity.findById( id );
+    if (commodity) {
+      res.json(commodity);
+    } else {
+      res.status(404).json({ message: '商品未找到' });
     }
-    if(name ==='admin'){ //設定管理員
-      role = 'admin';
-    };
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    const newUser = new User({ name, email, password: hashedPassword, role });
-
-    await newUser.save();  // 將資料儲存到 MongoDB
-    console.log("資料儲存成功");
-    res.status(201).json({ message: '使用者資料成功存入資料庫', user: newUser });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ message: '伺服器錯誤' });
   }
 });
 

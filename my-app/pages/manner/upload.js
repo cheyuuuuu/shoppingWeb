@@ -1,12 +1,15 @@
 import { useSession } from 'next-auth/react';
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
+import { Stack, Input, Button, Text, Box } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
 
 export default function Upload(){
   const { data: session, status } = useSession();
   const[ commodity, setCommodity ] = useState({ name: '', description: '', price: '', number:'', image: null,})
   const fileInputRef = useRef(null);
   const router = useRouter();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   
   const handleChange =(e) => {
     const { name, value } = e.target;
@@ -14,7 +17,7 @@ export default function Upload(){
       ...prevCommodity,
       [name]: value,
     }));
-  }
+  };
   const handleImageChange = (e) => {
     const file = e.target.files[0];  // 取得選中的檔案
     if (file) {
@@ -25,8 +28,8 @@ export default function Upload(){
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async () => {
+    
     for( let i in commodity ){
       if (commodity[i] === ""){
         alert("還有空格沒輸入！");
@@ -66,46 +69,69 @@ export default function Upload(){
   if (status === 'loading') {
     return <div>載入中...</div>;
   }
-  if(session.user.role === 'admin' ){
+  if(session && session.user && session.user.role === 'admin' ){
     return(
       <div>
         <h3>這是管理員區</h3>
         <h3>新增商品</h3>
-        <form onSubmit={handleSubmit}>
-          <input 
-            type='text'
-            name='name'
-            placeholder='商品名稱'
-            value={commodity.name}
-            onChange={handleChange}/>
-          <input 
-            type='text'
+        <Box maxW="sm" mx="auto">
+        <form onSubmit={handleSubmit(onSubmit)}>
+         <Stack spacing={4}>
+            <Input 
+              
+              name='name'
+              placeholder='商品名稱'
+              {...register("name", { required: "請輸入商品名稱" })}
+              value={commodity.name}
+              onChange={handleChange}
+              isInvalid={!!errors.name}
+              />
+            {errors.name && <Text color="red.500">{errors.name.message}</Text>}
+          <Input
+            
             name='description'
             placeholder='商品描述'
+            {...register("description", { required: "請輸入商品描述" })}
             value={commodity.description}
-            onChange={handleChange}/>
-          <input 
+            onChange={handleChange}
+            // isInvalid={!!errors.description}
+            />
+          {errors.description && <Text color="red.500">{errors.description.message}</Text>}
+          <Input 
             type='number'
             name='price'
             placeholder='商品價格'
+            {...register("price", { required: "請輸入商品價格" })}
             value={commodity.price}
-            onChange={handleChange}/>
-          <input 
+            onChange={handleChange}
+            isInvalid={!!errors.price}
+            />
+          {errors.price && <Text color="red.500">{errors.price.message}</Text>}
+          <Input 
             type='number'
             name='number'
             placeholder='庫存數量'
+            {...register("number", { required: "請輸入庫存數量" })}
             value={commodity.number}
-            onChange={handleChange}/>
-          <input 
+            onChange={handleChange}
+            isInvalid={!!errors.number}
+           />
+          {errors.number && <Text color="red.500">{errors.number.message}</Text>}
+          <Input 
             type='file'
             name='image'
             accept="image/*"
-            onChange={handleImageChange}/>
-          <button type='submit'>
+            {...register("image", { required: "請選擇檔案" })}
+            onChange={handleImageChange}
+            isInvalid={!!errors.file}
+            />
+          {errors.file && <Text color="red.500">{errors.file.message}</Text>}
+          <Button type='submit'>
            新增
-          </button>
+          </Button>
+          </Stack>
         </form>
-        
+        </Box>
       </div>
     )
   }

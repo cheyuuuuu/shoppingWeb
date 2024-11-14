@@ -4,9 +4,11 @@ import { For, Stack, Table, Flex, Input } from "@chakra-ui/react"
 import { Button } from "@/components/ui/button"
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
+
 export default function Edit(){
   const [ commodities, setCommodities ] = useState([]);
   const [ updates, setUpdates ] = useState({});
+  
   useEffect(() => {
     const fetchCommodities = async() => {
       try{
@@ -54,6 +56,7 @@ export default function Edit(){
       .filter((id) => updates[id].isSelected);
    
     if(selectedDelete.length === 0 ){
+        
         alert('請先勾選需要刪除的商品');
         return;
     }
@@ -174,6 +177,7 @@ export default function Edit(){
       <FaTrashAlt />
       刪除
     </Button>
+    
     </div>
   );
 }

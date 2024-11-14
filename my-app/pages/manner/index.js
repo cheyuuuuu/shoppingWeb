@@ -1,6 +1,7 @@
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-
+import SideBar from '@/components/sideBar';
+import { Box } from "@chakra-ui/react"
 
 export default function Manner(){
   const { data: session, status } = useSession();
@@ -10,11 +11,11 @@ export default function Manner(){
   }
   if(session.user.role === 'admin' ){
     return(
-      <div>
+      <Box >
+        
+        <SideBar></SideBar>
         <h3>這是管理員區</h3>
-        <Link href="/manner/upload">新增商品</Link>
-        <Link href="/manner/edit">修改商品</Link>
-      </div>
+      </Box>
     )
   }
   return(

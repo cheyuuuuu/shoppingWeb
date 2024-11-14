@@ -4,11 +4,14 @@ export default function Document() {
   return (
     <Html lang="zh-tw" suppressHydrationWarning >
       <Head>
-      <meta name="description" content="這是一個小型電商網站" />
-      <meta name="keywords" content="咖啡豆" />
-      <meta name="author" content="cheyu" />
-      
-      <link rel="icon" href="../favicon.png"></link>
+        <meta name="description" content="這是一個小型電商網站" />
+        <meta name="keywords" content="咖啡豆" />
+        <meta name="author" content="cheyu" />
+        <link rel="preconnect" href="https://fonts.googleapis.com"></link>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin></link>
+        <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=Noto+Serif+HK:wght@200..900&display=swap" rel="stylesheet"></link>
+
+        <link rel="icon" href="../favicon.png"></link>
       </Head>
       <body>
         <Main />

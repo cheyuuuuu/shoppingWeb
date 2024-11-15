@@ -10,38 +10,47 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
     CredentialsProvider({
-      name: '信箱',
+      name: "信箱",
       credentials: {
-        email: { label: '信箱', type: 'email', placeholder:'example@example.com' },
-        password: { label: '密碼', type: 'password' },
+        email: {
+          label: "信箱",
+          type: "email",
+          placeholder: "example@example.com",
+        },
+        password: { label: "密碼", type: "password" },
       },
       authorize: async (credentials) => {
-        const res = await fetch('http://localhost:3000/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("http://localhost:3000/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(credentials),
         });
 
         const user = await res.json();
         if (res.ok && user.user) {
-          
           return user.user; // 回傳資料庫中已驗證的使用者資料
         }
         return null; // 驗證失敗
       },
     }),
   ],
-  callbacks:{
+  callbacks: {
     async jwt({ token, user }) {
       // 確認 JWT 回調時是否有 user 物件
-      
+
       if (user) {
         // 檢查使用者的電子郵件，並根據電子郵件設定角色
-        if (user.email === 'fl64330786@gmail.com' || user.email === 'admin@admin.com') {
-          token.role = 'admin';
+        if (
+          user.email === "fl64330786@gmail.com" ||
+          user.email === "admin@admin.com"
+        ) {
+          token.role = "admin";
         } else {
-          token.role = 'user';
+          token.role = "user";
         }
+        token.cart = user.cart || [];
+        token.email = user.email;
+        token.name = user.name;
       }
       return token;
     },
@@ -49,8 +58,20 @@ export default NextAuth({
       // 使用 token 中的角色來設定 session 中的角色
       session.user.role = token.role;
       session.user.name = token.name;
-      
-      
+      session.user.email = token.email;
+      session.user.cart = token.cart || [];
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/user/${session.user.email}`
+        );
+        const userData = await response.json();
+        if (response.ok && userData.cart) {
+          session.user.cart = userData.cart;
+        }
+      } catch (error) {
+        console.error("獲取購物車資訊失敗:", error);
+      }
+
       return session;
     },
   },

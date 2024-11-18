@@ -1,12 +1,29 @@
-import { useState } from 'react';
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from 'next/router';
-import { Stack, Input, Button, Text, Box } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import {
+  Stack,
+  Input,
+  Button,
+  Text,
+  Box,
+  Field,
+  defineStyle,
+} from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 
 export default function Register() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const [user, setUser] = useState({ name: '', email: '', password: '', role: 'user' });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "user",
+  });
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -25,67 +42,119 @@ export default function Register() {
       } else break;
     }
 
-    const response = await fetch('/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user),
     });
 
     const data = await response.json();
     if (response.ok) {
-      console.log('用戶創建成功:', data);
-      setUser({ name: '', email: '', password: '', role: 'user' });
+      console.log("用戶創建成功:", data);
+      setUser({ name: "", email: "", password: "", role: "user" });
       alert("註冊成功！按下確認跳轉至首頁");
-      router.push('/');
+      router.push("/");
     } else {
-      console.error('錯誤:', data);
+      console.error("錯誤:", data);
       alert(data.message + "！");
     }
   };
 
+  const floatingStyles = defineStyle({
+    pos: "absolute",
+    bg: "#897d55df",
+    borderRadius: "md",
+    px: "0.5",
+    top: "-3",
+    insetStart: "2",
+    fontWeight: "normal",
+    pointerEvents: "none",
+    transition: "position",
+    _peerPlaceholderShown: {
+      color: "fg.muted",
+      top: "2.5",
+      insetStart: "3",
+    },
+    _peerFocusVisible: {
+      color: "fg",
+      top: "-3",
+      insetStart: "2",
+    },
+  });
+
   return (
     <Box maxW="sm" mx="auto">
-      <Text fontSize="2xl" mb="4" textAlign='center' m={5}>會員註冊</Text>
+      <Text fontSize="2xl" mb="4" textAlign="center" m={5}>
+        會員註冊
+      </Text>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          <Input
-            placeholder=" 姓名"
-            {...register("name", { required: "請輸入姓名" })}
-            value={user.name}
-            onChange={handleChange}
-            isInvalid={!!errors.name}
-            p={2}
-          />
-          {errors.name && <Text color="red.500">{errors.name.message}</Text>}
+          <Field.Root>
+            <Box pos="relative" w="full">
+              <Input
+                className="peer"
+                placeholder=""
+                {...register("name", { required: "※請輸入姓名" })}
+                value={user.name}
+                onChange={handleChange}
+                isInvalid={!!errors.name}
+                p={2}
+              />
+              <Field.Label css={floatingStyles}>姓名</Field.Label>
+              {errors.name && (
+                <Text color="red.500">{errors.name.message}</Text>
+              )}
+            </Box>
+          </Field.Root>
+          <Field.Root>
+            <Box pos="relative" w="full">
+              <Input
+                type="email"
+                className="peer"
+                placeholder=" "
+                {...register("email", { required: "※請輸入電子郵件" })}
+                value={user.email}
+                onChange={handleChange}
+                isInvalid={!!errors.email}
+                p={2}
+              />
+              <Field.Label css={floatingStyles}>電子郵件</Field.Label>
+              {errors.email && (
+                <Text color="red.500">{errors.email.message}</Text>
+              )}
+            </Box>
+          </Field.Root>
+          <Field.Root>
+            <Box pos="relative" w="full">
+              <Input
+                type="password"
+                className="peer"
+                placeholder=" "
+                {...register("password", { required: "※請輸入密碼" })}
+                value={user.password}
+                onChange={handleChange}
+                isInvalid={!!errors.password}
+                p={2}
+              />
+              <Field.Label css={floatingStyles}>密碼</Field.Label>
+              {errors.password && (
+                <Text color="red.500">{errors.password.message}</Text>
+              )}
+            </Box>
+          </Field.Root>
 
-          <Input
-            type="email"
-            placeholder=" 電子郵件"
-            {...register("email", { required: "請輸入電子郵件" })}
-            value={user.email}
-            onChange={handleChange}
-            isInvalid={!!errors.email}
-            p={2}
-          />
-          {errors.email && <Text color="red.500">{errors.email.message}</Text>}
-
-          <Input
-            type="password"
-            placeholder=" 密碼"
-            {...register("password", { required: "請輸入密碼" })}
-            value={user.password}
-            onChange={handleChange}
-            isInvalid={!!errors.password}
-            p={2}
-          />
-          {errors.password && <Text color="red.500">{errors.password.message}</Text>}
-
-          <Button type="submit" colorScheme="blue">註冊</Button>
+          <Button type="submit" colorScheme="blue">
+            註冊
+          </Button>
         </Stack>
       </form>
-      <Link href="/members">
-        <Text color="blue.500" mt="4" textAlign="center">回上一頁</Text>
-      </Link>
+      <Box textAlign="center" mt={4}>
+        <Link href="/members" style={{ display: "inline-block" }}>
+          <Text color="blue.500" mt="1" textAlign="center">
+            回上一頁
+          </Text>
+        </Link>
+      </Box>
     </Box>
   );
 }

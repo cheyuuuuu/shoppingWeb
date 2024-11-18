@@ -48,7 +48,6 @@ export default NextAuth({
         } else {
           token.role = "user";
         }
-        token.cart = user.cart || [];
         token.email = user.email;
         token.name = user.name;
       }
@@ -59,18 +58,6 @@ export default NextAuth({
       session.user.role = token.role;
       session.user.name = token.name;
       session.user.email = token.email;
-      session.user.cart = token.cart || [];
-      try {
-        const response = await fetch(
-          `http://localhost:5000/api/user/${session.user.email}`
-        );
-        const userData = await response.json();
-        if (response.ok && userData.cart) {
-          session.user.cart = userData.cart;
-        }
-      } catch (error) {
-        console.error("獲取購物車資訊失敗:", error);
-      }
 
       return session;
     },

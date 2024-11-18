@@ -13,29 +13,22 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { HiStar } from "react-icons/hi";
-import { toaster } from "@/components/ui/toaster";
 import {
   BreadcrumbCurrentLink,
   BreadcrumbRoot,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useCart } from "@/context/CartContext";
 
 export default function CommodityDetail() {
   const [commodity, setCommodity] = useState(null);
   const [count, setCount] = useState(1);
   const router = useRouter();
   const { id } = router.query;
+  const { addToCart } = useCart();
   const { data: session } = useSession();
   const userEmail = session?.user?.email;
-
-  useEffect(() => {
-    console.log("Session 狀態:", {
-      isLoading: !session,
-      user: session?.user,
-      expires: session?.expires,
-    });
-  }, [session]);
 
   useEffect(() => {
     if (id) {
@@ -64,46 +57,9 @@ export default function CommodityDetail() {
   };
 
   const handleAddToCart = async () => {
-    if (userEmail === undefined || userEmail === null) {
-      toaster.create({
-        title: "請先登入",
-        type: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-    try {
-      const response = await fetch(`http://localhost:5000/api/addCart`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userEmail: userEmail,
-          commodityId: id,
-          count: count,
-        }),
-      });
-      const data = await response.json();
-      console.log(data);
-      if (response.ok) {
-        toaster.create({
-          title: "加入購物車成功",
-          type: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-      } else {
-        toaster.create({
-          title: "加入購物車失敗",
-          type: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      console.error("加入購物車失敗", error);
+    const success = await addToCart(id, count);
+    if (success) {
+      alert("加入購物車成功");
     }
   };
 

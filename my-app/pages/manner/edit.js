@@ -118,7 +118,7 @@ export default function Edit() {
 
   return (
     <div>
-      <Stack gap="10">
+      <Stack gap="10" m={5}>
         <For each={["outline"]}>
           {(variant) => (
             <Table.Root
@@ -127,6 +127,8 @@ export default function Edit() {
               variant={variant}
               showColumnBorder
               stickyHeader
+              borderRadius="md"
+              shadow="5px 5px 5px gray"
             >
               <Table.Header>
                 <Table.Row>

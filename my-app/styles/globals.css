@@ -24,11 +24,11 @@ body {
 }
 
 body {
-  background: #d1903cc2;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #897d55c5, #897d55df);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #897d55aa, #897d55e9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-  /* background-image: url('../public/paper.jpg');
+  background: rgb(171, 170, 170);  /* fallback for old browsers */
+ 
+  /* background-image: url('../public/coffeShop.jpg');
+  background-size: contain; */
+  /* ;
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed; 

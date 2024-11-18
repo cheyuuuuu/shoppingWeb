@@ -68,8 +68,8 @@ app.post("/api/register", async (req, res) => {
     res
       .status(201)
       .json({ message: "使用者資料成功存入資料庫", user: newUser });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+  } catch (e) {
+    res.status(400).json({ error: e });
   }
 });
 
@@ -151,12 +151,24 @@ app.patch("/api/addCart", async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "用戶不存在" });
     }
+    //檢查購物車是否有該商品
+    const existingItemIndex = user.cart.findIndex(
+      (item) => item.commodityId === commodityId
+    );
 
-    if (user.cart.includes(commodityId)) {
-      ///
-      return res.status(400).json({ message: "商品已經在購物車中" });
+    if (existingItemIndex !== -1) {
+      //商品存在 就增加數量
+      user.cart[existingItemIndex].count += count;
+      console.log("更新商品數量", user.cart[existingItemIndex]);
+    } else {
+      //如果商品不存在 就加入商品
+      user.cart.push({
+        commodityId,
+        count,
+      });
+      console.log("添加新商品:", { commodityId, count });
     }
-    user.cart.push({ commodityId, count });
+
     await user.save();
     res.status(200).json({ message: "商品加入購物車成功" });
   } catch (error) {
@@ -164,24 +176,36 @@ app.patch("/api/addCart", async (req, res) => {
   }
 });
 
-//加入購物車後更新用戶session內容
+//獲取會員購物車內容
 app.get("/api/user/:email", async (req, res) => {
   try {
     const { email } = req.params;
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: "用戶不存在" });
     }
 
-    res.status(200).json({
-      email: user.email,
-      name: user.name,
-      cart: user.cart,
-    });
-  } catch (error) {
-    console.error("獲取用戶資訊失敗:", error);
-    res.status(500).json({ message: "獲取用戶資訊失敗" });
+    res.json({ cart: user.cart });
+  } catch (e) {
+    console.error("獲取用戶購物車:", e);
+    res.status(500).json({ message: "獲取用戶購物車失敗", error: e });
+  }
+});
+
+//移除購物車商品
+app.delete("/api/removeFromCart", async (req, res) => {
+  try {
+    const { userEmail, commodityId } = req.body;
+    const user = await User.findOne({ email: userEmail });
+    if (!user) {
+      return res.status(404).json({ message: " 用戶不存在" });
+    }
+    user.cart = user.cart.filter((item) => item.commodityId !== commodityId);
+    await user.save();
+    res.json({ message: "刪除購物車商品成功" });
+  } catch (e) {
+    res.status(500).json({ message: "刪除購物車商品失敗", error: e });
   }
 });
 

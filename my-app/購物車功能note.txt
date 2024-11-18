@@ -1,0 +1,11 @@
+實現購物車功能
+#使用context來管理購物車狀態
+#在app.js 中用 cartProvider包住 讓context裡的資訊可以被全域使用
+#跟購物車相關的function最好都寫在context.js裡面 用import來呼叫
+
+1.context 取得資料步驟 先從session 辨識會員身分 取得email後 拿著email去發送api給後端資料庫取得寫在user裡的購物車資料
+回傳給前端context context就取得目前的購物車資料了
+2.在購物車頁面使用cartItems 取得購物車資料陳列出來，並且可以刪除
+3.在商品的個別頁面 使用加入購物車按鈕 傳送商品id的api給後端 寫入user cart 資料中
+4.在nav 使用cartItems.length 顯示購物車內容物數量
+

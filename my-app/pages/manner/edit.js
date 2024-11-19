@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { For, Stack, Table, Flex, Input } from "@chakra-ui/react";
+import { For, Stack, Table, Flex, Box } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import {
+  NumberInputField,
+  NumberInputRoot,
+} from "@/components/ui/number-input";
+import SideBar from "@/components/sideBar";
 
 export default function Edit() {
   const [commodities, setCommodities] = useState([]);
@@ -44,7 +49,7 @@ export default function Edit() {
     }));
   };
 
-  const handleCheckBoxCahnge = (id) => {
+  const handleCheckBoxChange = (id) => {
     setUpdates((prev) => ({
       ...prev,
       [id]: {
@@ -118,109 +123,132 @@ export default function Edit() {
 
   return (
     <div>
-      <Stack gap="10" m={5}>
-        <For each={["outline"]}>
-          {(variant) => (
-            <Table.Root
-              key={variant}
-              size="sm"
-              variant={variant}
-              showColumnBorder
-              stickyHeader
-              borderRadius="md"
-              shadow="5px 5px 5px gray"
-            >
-              <Table.Header>
-                <Table.Row>
-                  <Table.ColumnHeader p={3} textAlign="center" width="5%">
-                    勾選欄
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader p={3} textAlign="center" width="20%">
-                    商品名稱
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader p={3} textAlign="center" width="20%">
-                    商品描述
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader p={3} textAlign="center" width="10%">
-                    商品價格
-                  </Table.ColumnHeader>
+      <Flex p={3} direction="row" h="100vh" w="100%">
+        <Box w="10%" h="100%" p={3} borderRadius="md" bg="gray">
+          <SideBar></SideBar>
+        </Box>
+        <Box w="90%" h="100%" p={3}>
+          <Stack gap="10" m={5}>
+            <For each={["outline"]}>
+              {(variant) => (
+                <Table.Root
+                  key={variant}
+                  size="sm"
+                  variant={variant}
+                  showColumnBorder
+                  stickyHeader
+                  borderRadius="md"
+                  shadow="5px 5px 5px gray, -5px 5px 5px gray"
+                >
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.ColumnHeader p={3} textAlign="center" width="5%">
+                        勾選欄
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader p={3} textAlign="center" width="20%">
+                        商品名稱
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader p={3} textAlign="center" width="20%">
+                        商品描述
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader p={3} textAlign="center" width="3%">
+                        商品價格
+                      </Table.ColumnHeader>
 
-                  <Table.ColumnHeader p={3} textAlign="center" width="10%">
-                    商品庫存
-                  </Table.ColumnHeader>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {commodities.map((commodity) => (
-                  <Table.Row key={commodity.id}>
-                    <Flex
-                      align="center"
-                      justify="center"
-                      w="100%"
-                      h="100%"
-                      marginTop="4"
-                    >
-                      <Checkbox
-                        variant="subtle"
-                        colorPalette="gray"
-                        type="checkbox"
-                        size="md"
-                        checked={updates[commodity._id].isSelected || false}
-                        onChange={() => handleCheckBoxCahnge(commodity._id)}
-                      ></Checkbox>
-                    </Flex>
-                    <Table.Cell textAlign="center">{commodity.name}</Table.Cell>
-                    <Table.Cell textAlign="center">
-                      {commodity.description}
-                    </Table.Cell>
+                      <Table.ColumnHeader p={3} textAlign="center" width="3%">
+                        商品庫存
+                      </Table.ColumnHeader>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {commodities.map((commodity) => (
+                      <Table.Row key={commodity.id}>
+                        <Flex
+                          align="center"
+                          justify="center"
+                          w="100%"
+                          h="100%"
+                          marginTop="4"
+                        >
+                          <Checkbox
+                            variant="subtle"
+                            colorPalette="gray"
+                            type="checkbox"
+                            size="md"
+                            checked={updates[commodity._id].isSelected || false}
+                            onCheckedChange={() =>
+                              handleCheckBoxChange(commodity._id)
+                            }
+                          ></Checkbox>
+                        </Flex>
+                        <Table.Cell textAlign="center">
+                          {commodity.name}
+                        </Table.Cell>
+                        <Table.Cell textAlign="center">
+                          {commodity.description}
+                        </Table.Cell>
 
-                    <Table.Cell p={3} m={1}>
-                      <Input
-                        type="number"
-                        size="xs"
-                        value={updates[commodity._id]?.price || ""}
-                        onChange={(e) =>
-                          handleInputChange(
-                            commodity._id,
-                            "price",
-                            e.target.value
-                          )
-                        }
-                        disabled={!updates[commodity._id]?.isSelected}
-                        min={0}
-                      />
-                    </Table.Cell>
-                    <Table.Cell p={3} m={1}>
-                      <Input
-                        type="number"
-                        size="xs"
-                        value={updates[commodity._id]?.number || ""}
-                        onChange={(e) =>
-                          handleInputChange(
-                            commodity._id,
-                            "number",
-                            e.target.value
-                          )
-                        }
-                        disabled={!updates[commodity._id]?.isSelected}
-                        min={0}
-                      />
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table.Root>
-          )}
-        </For>
-      </Stack>
-      <Button onClick={handleUpdate} size="sm" m={5} p={2} variant="surface">
-        <FaEdit />
-        修改
-      </Button>
-      <Button onClick={handleDelete} size="sm" m={5} p={2} variant="surface">
-        <FaTrashAlt />
-        刪除
-      </Button>
+                        <Table.Cell p={2}>
+                          <NumberInputRoot
+                            size="lg"
+                            value={updates[commodity._id]?.price || ""}
+                            onValueChange={(e) =>
+                              handleInputChange(commodity._id, "price", e.value)
+                            }
+                            disabled={!updates[commodity._id]?.isSelected}
+                            min={0}
+                            w={20}
+                          >
+                            <NumberInputField />
+                          </NumberInputRoot>
+                        </Table.Cell>
+                        <Table.Cell p={3}>
+                          <NumberInputRoot
+                            size="lg"
+                            value={updates[commodity._id]?.number || ""}
+                            onValueChange={(e) =>
+                              handleInputChange(
+                                commodity._id,
+                                "number",
+                                e.value
+                              )
+                            }
+                            disabled={!updates[commodity._id]?.isSelected}
+                            min={0}
+                            w={20}
+                          >
+                            <NumberInputField />
+                          </NumberInputRoot>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table.Root>
+              )}
+            </For>
+          </Stack>
+          <Button
+            onClick={handleUpdate}
+            size="sm"
+            m={5}
+            p={2}
+            variant="surface"
+          >
+            <FaEdit />
+            修改
+          </Button>
+          <Button
+            onClick={handleDelete}
+            size="sm"
+            m={5}
+            p={2}
+            variant="surface"
+          >
+            <FaTrashAlt />
+            刪除
+          </Button>
+        </Box>
+      </Flex>
     </div>
   );
 }

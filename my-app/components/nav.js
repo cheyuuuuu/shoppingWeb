@@ -72,12 +72,12 @@ export default function Nav() {
               購物車
               <Box
                 position="absolute"
-                top="1"
+                top="0"
                 right="0"
                 transform="translate(50%, -50%)"
               >
                 <Float>
-                  <Circle size="5" bg="red" color="white">
+                  <Circle size="5" bg="white" color="grey">
                     {cartItems.length}
                   </Circle>
                 </Float>

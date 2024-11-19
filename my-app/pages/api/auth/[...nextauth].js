@@ -10,7 +10,8 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
     CredentialsProvider({
-      name: "信箱",
+      id: "credentials",
+      name: "信箱&密碼",
       credentials: {
         email: {
           label: "信箱",

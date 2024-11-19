@@ -1,12 +1,15 @@
 import { useCart } from "@/context/CartContext";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { For, Stack, Table, Flex, Button } from "@chakra-ui/react";
+import { StepperInput } from "@/components/ui/stepper-input";
 import { useSession } from "next-auth/react";
 
 export default function ShoppingCart() {
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, updateCartItemCount } = useCart();
   const [commodities, setCommodities] = useState({});
   const { data: session } = useSession();
+  const router = useRouter();
   let totalPrice = 0;
   // 獲取商品詳細資訊
   useEffect(() => {
@@ -28,6 +31,15 @@ export default function ShoppingCart() {
 
     fetchCommodities();
   }, [cartItems]);
+
+  const handleCountChange = async (commodityId, value) => {
+    const success = await updateCartItemCount(commodityId, value);
+    if (success) {
+      console.log("數量已更新");
+    } else {
+      console.log("數量更新失敗");
+    }
+  };
 
   cartItems.forEach((item) => {
     totalPrice += commodities[item.commodityId]?.price * item.count;
@@ -53,6 +65,8 @@ export default function ShoppingCart() {
               variant={variant}
               showColumnBorder
               stickyHeader
+              borderRadius="md"
+              shadow="5px 5px 5px gray"
             >
               <Table.Header bg={"gray.300"}>
                 <Table.Row>
@@ -79,8 +93,18 @@ export default function ShoppingCart() {
                     <Table.Cell textAlign="center">
                       {commodities[item.commodityId]?.price}
                     </Table.Cell>
+                    <Table.Cell textAlign="center" justifyItems="center">
+                      <StepperInput
+                        defaultValue={item.count}
+                        p={2}
+                        min={1}
+                        max={commodities[item.commodityId]?.number}
+                        onValueChange={({ value }) =>
+                          handleCountChange(item.commodityId, value)
+                        }
+                      />
+                    </Table.Cell>
 
-                    <Table.Cell textAlign="center">{item.count}</Table.Cell>
                     <Table.Cell textAlign="center">
                       <Flex
                         justify="center" // 水平置中
@@ -103,6 +127,9 @@ export default function ShoppingCart() {
         </For>
       </Stack>
       <label>總金額{totalPrice}元</label>
+      <Button onClick={() => router.push("/demo")} m={4}>
+        結帳
+      </Button>
     </div>
   );
 }

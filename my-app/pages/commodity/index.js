@@ -85,13 +85,13 @@ export default function Demo() {
                   <Box p="4" spaceY="3">
                     <HStack>
                       <Badge colorPalette="teal" variant="solid" p="1">
-                        new
+                        新
                       </Badge>
                       <HStack gap="1" fontWeight="medium">
                         <Icon color="orange.400">
                           <HiStar />
                         </Icon>
-                        <Text textStyle="lg">{commodity.name}</Text>
+                        <Text textStyle="2xl">{commodity.name}</Text>
                       </HStack>
                     </HStack>
                     <Text fontWeight="medium" color="fg">

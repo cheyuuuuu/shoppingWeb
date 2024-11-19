@@ -20,6 +20,7 @@ import {
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useCart } from "@/context/CartContext";
+import { StepperInput } from "@/components/ui/stepper-input";
 
 export default function CommodityDetail() {
   const [commodity, setCommodity] = useState(null);
@@ -67,15 +68,13 @@ export default function CommodityDetail() {
 
   return (
     <div>
-      <BreadcrumbRoot m={2}>
-        <Link href="/">首頁</Link>
-        <Link href="/commodity">商品頁面</Link>
-        <BreadcrumbCurrentLink textStyle="xl">
-          {commodity.name}
-        </BreadcrumbCurrentLink>
-      </BreadcrumbRoot>
-      <Flex wrap="wrap" spaceX="0" p={3} direction="row">
-        <Box w="20%" p={3} borderRight="1px" borderColor="gray.200">
+      <Flex wrap="wrap" p={3} minH="100vh">
+        <Box
+          w={{ base: "100%", lg: "10%" }}
+          p={3}
+          borderRight="1px"
+          borderColor="gray.200"
+        >
           <Text fontSize="lg" fontWeight="bold">
             商品分類
           </Text>
@@ -91,56 +90,77 @@ export default function CommodityDetail() {
             </Link>
           </Stack>
         </Box>
-        <Box
-          key={commodity._id}
-          maxW="sm"
-          borderWidth="1px"
-          p={2}
-          w={200}
-          m={1}
-        >
-          <Image
-            src={`${process.env.NEXT_PUBLIC_BASE_URL}${commodity.image.url}`}
-            alt={commodity.name}
-            height="150px"
-            width={200}
-          />
-          <Box p="4" spaceY="5">
-            <HStack>
-              <Badge colorPalette="teal" variant="solid" p="1">
-                new
-              </Badge>
-              <HStack gap="1" fontWeight="medium">
-                <Icon color="orange.400">
-                  <HiStar />
-                </Icon>
-                <Text textStyle="lg">{commodity.name}</Text>
+        <Box w={{ base: "100%", lg: "20%" }}>
+          <BreadcrumbRoot m={2}>
+            <Link href="/" style={{ color: "white" }}>
+              首頁
+            </Link>
+            <Link href="/commodity" style={{ color: "white" }}>
+              商品頁面
+            </Link>
+            <BreadcrumbCurrentLink textStyle="xl" style={{ color: "white" }}>
+              {commodity.name}
+            </BreadcrumbCurrentLink>
+          </BreadcrumbRoot>
+          <Box
+            key={commodity._id}
+            maxW="sm"
+            p={2}
+            w={200}
+            m={1}
+            borderRadius="md"
+            bg={"gray"}
+          >
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}${commodity.image.url}`}
+              alt={commodity.name}
+              height="150px"
+              width={200}
+            />
+            <Box p="4" spaceY="5">
+              <HStack>
+                <Badge colorPalette="teal" variant="solid" p="1">
+                  new
+                </Badge>
+                <HStack gap="1" fontWeight="medium">
+                  <Icon color="orange.400">
+                    <HiStar />
+                  </Icon>
+                  <Text textStyle="2xl">{commodity.name}</Text>
+                </HStack>
               </HStack>
-            </HStack>
-            <Text fontWeight="medium" color="fg">
-              {commodity.description}
-            </Text>
-            <HStack color="fg.muted">價格：NTD{commodity.price}</HStack>
-            <HStack color="fg.muted">庫存：{commodity.number}</HStack>
+              <Text fontWeight="medium" color="fg">
+                {commodity.description}
+              </Text>
+              <HStack color="fg.muted">價格：NTD{commodity.price}</HStack>
+              <HStack color="fg.muted">庫存：{commodity.number}</HStack>
+            </Box>
           </Box>
         </Box>
-        <Box p={2} spaceX={2}>
-          <Text pl={2}>數量：</Text>
-          <Input
-            type="number"
-            value={count}
-            onChange={(e) => handleChangeCount(e.target.value)}
-            min={1}
-            max={commodity.number}
-            w={10}
-          />
-          <Button
-            onClick={handleAddToCart}
-            disabled={!userEmail || count < 1 || count > commodity.number}
-            p={2}
-          >
-            加入購物車
-          </Button>
+        <Box
+          w={{ base: "100%", md: "15%" }} // 響應式寬度
+          p={4}
+        >
+          <Stack spacing={4} w="full">
+            <Text pl={2}>數量：</Text>
+            <StepperInput
+              type="number"
+              value={count}
+              onValueChange={(e) => handleChangeCount(e.value)}
+              min={1}
+              max={commodity.number}
+              w="100px"
+              mb={2}
+            />
+            <Button
+              onClick={handleAddToCart}
+              disabled={!userEmail || count < 1 || count > commodity.number}
+              p={2}
+              w="200px"
+            >
+              加入購物車
+            </Button>
+          </Stack>
         </Box>
       </Flex>
     </div>

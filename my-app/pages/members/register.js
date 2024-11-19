@@ -62,7 +62,7 @@ export default function Register() {
 
   const floatingStyles = defineStyle({
     pos: "absolute",
-    bg: "#897d55df",
+    bg: "rgb(171, 170, 170)",
     borderRadius: "md",
     px: "0.5",
     top: "-3",
@@ -88,7 +88,7 @@ export default function Register() {
         會員註冊
       </Text>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={4}>
+        <Stack spacing={4} spaceY={5}>
           <Field.Root>
             <Box pos="relative" w="full">
               <Input

@@ -193,6 +193,40 @@ app.get("/api/user/:email", async (req, res) => {
   }
 });
 
+//修改購物車商品數量
+app.patch("/api/updateCart", async (req, res) => {
+  try {
+    const { userEmail, commodityId, count } = req.body;
+
+    if (count < 0) {
+      return res.status(400).json({ message: "數量不能小於0" });
+    }
+    const user = await User.findOne({ email: userEmail });
+    if (!user) {
+      return res.status(404).json({ message: "用戶不存在" });
+    }
+    if (count === 0) {
+      user.cart = user.cart.filter((item) => item.commodityId !== commodityId);
+    } else {
+      const itemIndex = user.cart.findIndex(
+        (item) => item.commodityId === commodityId
+      );
+      if (itemIndex === -1) {
+        return res.status(404).json({ message: "商品不在購物車內" });
+      }
+      user.cart[itemIndex].count = count;
+    }
+    await user.save();
+    res.status(200).json({
+      message: "商品數量已更新",
+      cart: user.cart,
+    });
+  } catch (e) {
+    console.error("更新購物車數量發生錯誤", e);
+    res.status(500).json({ message: "更新購物車數量失敗", error: e.message });
+  }
+});
+
 //移除購物車商品
 app.delete("/api/removeFromCart", async (req, res) => {
   try {

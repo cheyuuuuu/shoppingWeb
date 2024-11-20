@@ -1,19 +1,22 @@
+import { For, Stack, Table, Flex, Button, Text } from "@chakra-ui/react";
 import { useCart } from "@/context/CartContext";
-import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { For, Stack, Table, Flex, Button, Box, Text } from "@chakra-ui/react";
-import { StepsRoot } from "@/components/ui/steps";
 import Step from "@/components/step";
-import { StepperInput } from "@/components/ui/stepper-input";
-import { useSession } from "next-auth/react";
+import {
+  StepsCompletedContent,
+  StepsContent,
+  StepsItem,
+  StepsList,
+  StepsNextTrigger,
+  StepsPrevTrigger,
+  StepsRoot,
+} from "@/components/ui/steps";
 
-export default function ShoppingCart() {
-  const { cartItems, removeFromCart, updateCartItemCount } = useCart();
+export default function Order() {
+  const { cartItems } = useCart();
   const [commodities, setCommodities] = useState({});
-  const { data: session } = useSession();
-  const router = useRouter();
   let totalPrice = 0;
-  // 獲取商品詳細資訊
+
   useEffect(() => {
     const fetchCommodities = async () => {
       const commodityDetails = {};
@@ -32,36 +35,14 @@ export default function ShoppingCart() {
     };
 
     fetchCommodities();
-    0;
   }, [cartItems]);
-
-  const handleCountChange = async (commodityId, value) => {
-    const numberValue = Number(value);
-
-    const success = await updateCartItemCount(commodityId, numberValue);
-    if (success) {
-      console.log("數量已更新");
-    } else {
-      console.log("數量更新失敗");
-    }
-  };
 
   cartItems.forEach((item) => {
     totalPrice += commodities[item.commodityId]?.price * item.count;
   });
-
-  if (!session) {
-    return <div>請先登入</div>;
-  }
-
-  if (cartItems.length === 0) {
-    return <div>購物車是空的喔~</div>;
-  }
-
   return (
     <div>
-      <Step currentStep={0}></Step>
-
+      <Step currentStep={1}></Step>
       <Stack gap="10">
         <For each={["outline"]}>
           {(variant) => (
@@ -89,14 +70,11 @@ export default function ShoppingCart() {
                   <Table.ColumnHeader p={3} textAlign="center" width="10%">
                     數量
                   </Table.ColumnHeader>
-                  <Table.ColumnHeader p={3} textAlign="center" width="5%">
-                    操作
-                  </Table.ColumnHeader>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {cartItems.map((item) => (
-                  <Table.Row key={item.commodityId}>
+                  <Table.Row key={item.commodityId} h={10}>
                     <Table.Cell textAlign="center">
                       {commodities[item.commodityId]?.name}
                     </Table.Cell>
@@ -104,30 +82,7 @@ export default function ShoppingCart() {
                       {commodities[item.commodityId]?.price}
                     </Table.Cell>
                     <Table.Cell textAlign="center" justifyItems="center">
-                      <StepperInput
-                        defaultValue={item.count}
-                        p={2}
-                        min={1}
-                        max={commodities[item.commodityId]?.number}
-                        onValueChange={({ value }) =>
-                          handleCountChange(item.commodityId, value)
-                        }
-                      />
-                    </Table.Cell>
-
-                    <Table.Cell textAlign="center">
-                      <Flex
-                        justify="center" // 水平置中
-                        align="center" // 垂直置中
-                        w="full"
-                        m={1}
-                      >
-                        <Button
-                          onClick={() => removeFromCart(item.commodityId)}
-                        >
-                          移除
-                        </Button>
-                      </Flex>
+                      {item.count}
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -136,11 +91,15 @@ export default function ShoppingCart() {
           )}
         </For>
       </Stack>
-      <Flex mx="auto" justifyContent="center" alignItems="center" gap={4}>
+      <Flex
+        mx="auto"
+        justifyContent="center"
+        alignItems="center"
+        gap={4}
+        mt={5}
+      >
         <Text fontSize="2xl">總金額{totalPrice}元</Text>
-        <Button onClick={() => router.push("/demo")} m={4}>
-          結帳
-        </Button>
+        <Button onClick={() => ({})}>送出</Button>
       </Flex>
     </div>
   );

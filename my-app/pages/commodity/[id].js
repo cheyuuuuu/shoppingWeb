@@ -21,6 +21,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useCart } from "@/context/CartContext";
 import { StepperInput } from "@/components/ui/stepper-input";
+import CommoditySideBar from "@/components/commoditySideBar";
 
 export default function CommodityDetail() {
   const [commodity, setCommodity] = useState(null);
@@ -75,20 +76,7 @@ export default function CommodityDetail() {
           borderRight="1px"
           borderColor="gray.200"
         >
-          <Text fontSize="lg" fontWeight="bold">
-            商品分類
-          </Text>
-          <Stack spacing={4}>
-            <Link href="/category/1">
-              <Text>分類 1</Text>
-            </Link>
-            <Link href="/category/2">
-              <Text>分類 2</Text>
-            </Link>
-            <Link href="/category/3">
-              <Text>分類 3</Text>
-            </Link>
-          </Stack>
+          <CommoditySideBar />
         </Box>
         <Box w={{ base: "100%", lg: "20%" }}>
           <BreadcrumbRoot m={2}>
@@ -106,7 +94,7 @@ export default function CommodityDetail() {
             key={commodity._id}
             maxW="sm"
             p={2}
-            w={200}
+            w={250}
             m={1}
             borderRadius="md"
             bg={"gray"}
@@ -116,6 +104,8 @@ export default function CommodityDetail() {
               alt={commodity.name}
               height="150px"
               width={200}
+              mx="auto"
+              borderRadius="md"
             />
             <Box p="4" spaceY="5">
               <HStack>
@@ -132,7 +122,7 @@ export default function CommodityDetail() {
               <Text fontWeight="medium" color="fg">
                 {commodity.description}
               </Text>
-              <HStack color="fg.muted">價格：NTD{commodity.price}</HStack>
+              <HStack color="fg.muted">價格：NT${commodity.price}</HStack>
               <HStack color="fg.muted">庫存：{commodity.number}</HStack>
             </Box>
           </Box>

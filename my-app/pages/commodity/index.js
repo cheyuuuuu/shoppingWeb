@@ -15,8 +15,9 @@ import {
   BreadcrumbCurrentLink,
   BreadcrumbRoot,
 } from "@/components/ui/breadcrumb";
+import CommoditySideBar from "@/components/commoditySideBar";
 
-export default function Demo() {
+export default function Commodity() {
   const [commodities, setCommodities] = useState([]);
   useEffect(() => {
     const fetchCommodities = async () => {
@@ -39,20 +40,7 @@ export default function Demo() {
     <div>
       <Flex p={3} direction="row" h="100vh" w="100%">
         <Box w="10%" h="100%" p={3} borderRadius="md">
-          <Text fontSize="lg" fontWeight="bold">
-            商品分類
-          </Text>
-          <Stack spacing={4}>
-            <Link href="/category/1">
-              <Text>分類 1</Text>
-            </Link>
-            <Link href="/category/2">
-              <Text>分類 2</Text>
-            </Link>
-            <Link href="/category/3">
-              <Text>分類 3</Text>
-            </Link>
-          </Stack>
+          <CommoditySideBar />
         </Box>
         <Box p={2} pl={2}>
           <BreadcrumbRoot m={0} pl={2}>
@@ -97,7 +85,7 @@ export default function Demo() {
                     <Text fontWeight="medium" color="fg">
                       {commodity.description}
                     </Text>
-                    <HStack color="fg.muted">價格：NTD{commodity.price}</HStack>
+                    <HStack color="fg.muted">價格：NT${commodity.price}</HStack>
                     <HStack color="fg.muted">庫存：{commodity.number}</HStack>
                   </Box>
                 </Box>

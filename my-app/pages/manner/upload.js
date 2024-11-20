@@ -10,9 +10,12 @@ import {
   Flex,
   Field,
   defineStyle,
+  Select,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import SideBar from "@/components/sideBar";
+
+const PRODUCT_TYPES = ["吃的", "喝的", "玩的"];
 
 export default function Upload() {
   const { data: session, status } = useSession();
@@ -21,6 +24,7 @@ export default function Upload() {
     description: "",
     price: "",
     number: "",
+    type: "",
     image: null,
   });
   const fileInputRef = useRef(null);
@@ -98,6 +102,7 @@ export default function Upload() {
     fontWeight: "normal",
     pointerEvents: "none",
     transition: "position",
+    zIndex: 2,
     _peerPlaceholderShown: {
       color: "fg.muted",
       top: "2.5",
@@ -130,9 +135,11 @@ export default function Upload() {
               borderRadius="md"
               bg="gray"
             >
-              <Text fontSize="xl" fontWeight="bold" mt={4}>
-                新增商品
-              </Text>
+              <Flex pt={5}>
+                <Text fontSize="xl" fontWeight="bold">
+                  新增商品
+                </Text>
+              </Flex>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack>
                   <Field.Root>
@@ -177,6 +184,7 @@ export default function Upload() {
                       <Field.Label css={floatingStyles}>商品描述</Field.Label>
                     </Box>
                   </Field.Root>
+
                   <Field.Root>
                     <Box pos="relative" w="full">
                       <Input
@@ -190,6 +198,7 @@ export default function Upload() {
                         isInvalid={!!errors.price}
                         m={3}
                         pl={2}
+                        min={0}
                       />
                       {errors.price && (
                         <Text color="red.500">{errors.price.message}</Text>
@@ -210,6 +219,7 @@ export default function Upload() {
                         isInvalid={!!errors.number}
                         m={3}
                         pl={2}
+                        min={0}
                       />
                       {errors.number && (
                         <Text color="red.500">{errors.number.message}</Text>

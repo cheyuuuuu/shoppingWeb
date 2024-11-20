@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 import { CartProvider } from "@/context/CartContext";
 
+
 export default function App({
   Component,
   pageProps: { session, ...pageProps },

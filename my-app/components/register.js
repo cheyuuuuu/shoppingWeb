@@ -8,9 +8,11 @@ import {
   Text,
   Box,
   Field,
+  Flex,
   defineStyle,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
+import SigninBtn from "@/components/SigninBtn";
 
 export default function Register() {
   const {
@@ -83,12 +85,12 @@ export default function Register() {
   });
 
   return (
-    <Box maxW="sm" mx="auto">
+    <Box w={300} mx="auto" bg="gray.500" borderRadius="md" mt={5}>
       <Text fontSize="2xl" mb="4" textAlign="center" m={5}>
         會員註冊
       </Text>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={4} spaceY={5}>
+        <Stack spacing={4} spaceY={5} m={3}>
           <Field.Root>
             <Box pos="relative" w="full">
               <Input
@@ -148,13 +150,17 @@ export default function Register() {
           </Button>
         </Stack>
       </form>
-      <Box textAlign="center" mt={4}>
+      <Flex mt={4} justifyContent="center" mx="auto">
         <Link href="/members" style={{ display: "inline-block" }}>
-          <Text color="blue.500" mt="1" textAlign="center">
+          <Text color="white" mt="1" textStyle="xl">
             回上一頁
           </Text>
         </Link>
-      </Box>
+        <Text color="white" mt="1" textStyle="xl" pl={3}>
+          /
+        </Text>
+        <SigninBtn />
+      </Flex>
     </Box>
   );
 }

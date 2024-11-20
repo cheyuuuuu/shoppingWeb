@@ -9,7 +9,6 @@ import {
   Text,
   Stack,
   Flex,
-  Input,
   Button,
 } from "@chakra-ui/react";
 import { HiStar } from "react-icons/hi";
@@ -85,6 +84,12 @@ export default function CommodityDetail() {
             </Link>
             <Link href="/commodity" style={{ color: "white" }}>
               商品頁面
+            </Link>
+            <Link
+              href={`/commodity/category/${encodeURIComponent(commodity.type)}`}
+              style={{ color: "white" }}
+            >
+              {commodity.type}
             </Link>
             <BreadcrumbCurrentLink textStyle="xl" style={{ color: "white" }}>
               {commodity.name}

@@ -12,6 +12,7 @@ const bcrypt = require("bcrypt");
 const User = require("./models/User");
 const Commodity = require("./models/commodity");
 const { url } = require("inspector");
+const { error } = require("console");
 const app = express();
 
 const saltRounds = 10;
@@ -112,7 +113,7 @@ app.post("/api/auth[...nextauth]", async (req, res) => {
 //新增商品
 app.post("/api/upload", upload.single("image"), async (req, res) => {
   try {
-    const { name, description, price, number } = req.body;
+    const { name, description, type, price, number } = req.body;
     if (!req.file) {
       return res.status(400).json({ error: "請上傳圖片" });
     }
@@ -126,6 +127,7 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
     const newCommodity = new Commodity({
       name,
       description,
+      type,
       price,
       number,
       image: {
@@ -293,6 +295,21 @@ app.get("/api/commodities", async (req, res) => {
     res.status(200).json(commodities);
   } catch (e) {
     res.status(500).json({ message: "資料取得失敗", error: error.message });
+  }
+});
+
+//獲得依類型分類商品
+app.get("/api/commodity/category/:type", async (req, res) => {
+  const decodedType = decodeURIComponent(req.params.type);
+  try {
+    const commodities = await Commodity.find({ type: decodedType });
+    if (commodities) {
+      res.json(commodities);
+    } else {
+      res.status(404).json({ message: "商品類別未找到" });
+    }
+  } catch (e) {
+    res.status(500).json({ message: "獲取類別資料失敗", error: e });
   }
 });
 

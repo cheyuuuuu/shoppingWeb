@@ -10,12 +10,10 @@ import {
   Flex,
   Field,
   defineStyle,
-  Select,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import SideBar from "@/components/sideBar";
-
-const PRODUCT_TYPES = ["吃的", "喝的", "玩的"];
+import { types } from "@/data/commodityTypes";
 
 export default function Upload() {
   const { data: session, status } = useSession();
@@ -62,6 +60,7 @@ export default function Upload() {
     const formData = new FormData();
     formData.append("name", commodity.name);
     formData.append("description", commodity.description);
+    formData.append("type", commodity.type);
     formData.append("price", commodity.price);
     formData.append("number", commodity.number);
     formData.append("image", commodity.image);
@@ -77,6 +76,7 @@ export default function Upload() {
       setCommodity({
         name: "",
         description: "",
+        type: "",
         price: "",
         number: "",
         image: null,
@@ -182,6 +182,30 @@ export default function Upload() {
                         </Text>
                       )}
                       <Field.Label css={floatingStyles}>商品描述</Field.Label>
+                    </Box>
+                  </Field.Root>
+                  <Field.Root>
+                    <Box pos="relative" w="full" pl={3}>
+                      <select
+                        name="type"
+                        style={{
+                          backgroundColor: "gray",
+                          border: "1px solid white",
+                          borderRadius: "3px",
+                        }}
+                        {...register("type", { required: "請選擇商品類型" })}
+                        value={commodity.type}
+                        defaultValue=""
+                        onChange={handleChange}
+                        isInvalid={!!errors.type}
+                      >
+                        <option value="" disabled>
+                          請選擇一個類型
+                        </option>
+                        {types.map((type) => (
+                          <option value={type}>{type}</option>
+                        ))}
+                      </select>
                     </Box>
                   </Field.Root>
 

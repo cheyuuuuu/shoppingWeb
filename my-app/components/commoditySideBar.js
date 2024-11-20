@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Stack, Flex, Text } from "@chakra-ui/react";
+import { types } from "@/data/commodityTypes";
 
 export default function CommoditySideBar() {
   return (
@@ -14,9 +15,14 @@ export default function CommoditySideBar() {
         <Text fontSize="lg" fontWeight="bold">
           商品分類
         </Text>
-        <Link href="/">分類1</Link>
-        <Link href="/">分類2</Link>
-        <Link href="/">分類3</Link>
+        {types.map((type) => (
+          <Link
+            key={type}
+            href={`/commodity/category/${encodeURIComponent(type)}`}
+          >
+            {type}
+          </Link>
+        ))}
       </Flex>
     </Stack>
   );

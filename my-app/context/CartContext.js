@@ -77,6 +77,10 @@ export function CartProvider({ children }) {
     }
   };
 
+  const updateCart = (newItems) => {
+    setCartItems(newItems);
+  };
+
   //修改購物車商品數量
   const updateCartItemCount = async (commodityId, newCount) => {
     if (!userEmail || newCount < 0) return false;
@@ -131,7 +135,13 @@ export function CartProvider({ children }) {
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, updateCartItemCount }}
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        updateCartItemCount,
+        updateCart,
+      }}
     >
       {children}
     </CartContext.Provider>

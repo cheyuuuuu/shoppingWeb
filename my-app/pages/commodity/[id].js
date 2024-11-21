@@ -70,14 +70,14 @@ export default function CommodityDetail() {
     <div>
       <Flex wrap="wrap" p={3} minH="100vh">
         <Box
-          w={{ base: "100%", lg: "10%" }}
+          w={{ base: "10%", lg: "10%" }}
           p={3}
           borderRight="1px"
           borderColor="gray.200"
         >
           <CommoditySideBar />
         </Box>
-        <Box w={{ base: "100%", lg: "20%" }}>
+        <Box w={{ base: "80%", lg: "30%" }}>
           <BreadcrumbRoot m={2}>
             <Link href="/" style={{ color: "white" }}>
               首頁

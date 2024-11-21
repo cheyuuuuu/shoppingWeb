@@ -8,31 +8,47 @@ import { StepperInput } from "@/components/ui/stepper-input";
 import { useSession } from "next-auth/react";
 
 export default function ShoppingCart() {
-  const { cartItems, removeFromCart, updateCartItemCount } = useCart();
+  const { cartItems, removeFromCart, updateCartItemCount, updateCart } =
+    useCart();
   const [commodities, setCommodities] = useState({});
   const { data: session } = useSession();
   const router = useRouter();
   let totalPrice = 0;
+
   // 獲取商品詳細資訊
   useEffect(() => {
     const fetchCommodities = async () => {
       const commodityDetails = {};
-      for (const item of cartItems) {
+      const validCartItems = [...cartItems];
+      let hasInvalidItems = false;
+      for (let i = 0; i < validCartItems.length; i++) {
+        const item = validCartItems[i];
         try {
           const response = await fetch(
             `http://localhost:5000/api/commodity/${item.commodityId}`
           );
           const data = await response.json();
-          commodityDetails[item.commodityId] = data;
+
+          if (data.message === "商品未找到") {
+            validCartItems.splice(i, 1);
+            hasInvalidItems = true;
+            i--;
+          } else {
+            commodityDetails[item.commodityId] = data;
+          }
         } catch (error) {
           console.error("獲取商品資訊失敗:", error);
         }
       }
+      if (hasInvalidItems) {
+        updateCart(validCartItems);
+      }
       setCommodities(commodityDetails);
     };
 
-    fetchCommodities();
-    0;
+    if (cartItems.length > 0) {
+      fetchCommodities();
+    }
   }, [cartItems]);
 
   const handleCountChange = async (commodityId, value) => {

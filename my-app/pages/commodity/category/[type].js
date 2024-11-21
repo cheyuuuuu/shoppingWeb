@@ -48,7 +48,26 @@ export default function CommoditiesType() {
   }, [type]);
 
   if (isLoading) return <p>載入中...</p>; // 修改載入檢查
-  if (!commodities || commodities.length === 0) return <p>此類別沒有商品</p>;
+  if (!commodities || commodities.length === 0)
+    return (
+      <div>
+        <Flex p={3} minH="100vh">
+          <Box
+            w={{ base: "100%", lg: "10%" }}
+            p={3}
+            borderRight="1px"
+            borderColor="gray.200"
+          >
+            <CommoditySideBar />
+          </Box>
+          <Box w={{ base: "100%", lg: "90%" }}>
+            <Flex justifyContent="center" alignContent="center">
+              <p>此類別沒有商品</p>
+            </Flex>
+          </Box>
+        </Flex>
+      </div>
+    );
 
   return (
     <div>
@@ -75,9 +94,8 @@ export default function CommoditiesType() {
           </BreadcrumbRoot>
           <Flex wrap="wrap" gap={4} p={4} justifyContent="flex-start">
             {commodities.map((commodity) => (
-              <Link href={`/commodity/${commodity._id}`}>
+              <Link href={`/commodity/${commodity._id}`} key={commodity._id}>
                 <Box
-                  key={commodity._id}
                   maxW="sm"
                   p={2}
                   w={250}

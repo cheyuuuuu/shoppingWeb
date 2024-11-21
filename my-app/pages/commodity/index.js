@@ -1,13 +1,4 @@
-import {
-  Badge,
-  Box,
-  HStack,
-  Icon,
-  Image,
-  Text,
-  Stack,
-  Flex,
-} from "@chakra-ui/react";
+import { Badge, Box, HStack, Icon, Image, Text, Flex } from "@chakra-ui/react";
 import { HiStar } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import Link from "next/link";

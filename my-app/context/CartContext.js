@@ -78,6 +78,12 @@ export function CartProvider({ children }) {
     }
   };
 
+  //完成訂單之後清空購物車
+  const clearCart = async () => {
+    setCartItems([]);
+  };
+
+  //避免購物車裡有已下架商品 更新setCartItems
   const updateCart = (newItems) => {
     setCartItems(newItems);
   };
@@ -142,6 +148,7 @@ export function CartProvider({ children }) {
         removeFromCart,
         updateCartItemCount,
         updateCart,
+        clearCart,
       }}
     >
       {children}

@@ -19,7 +19,7 @@ import Step from "@/components/step";
 
 export default function Order() {
   const { data: session } = useSession();
-  const { cartItems } = useCart();
+  const { cartItems, clearCart } = useCart();
   const [commodities, setCommodities] = useState({});
   const [order, setOrder] = useState({
     name: "",
@@ -34,7 +34,6 @@ export default function Order() {
   } = useForm();
   const userEmail = session?.user?.email;
   let totalPrice = 0;
-  console.log(cartItems);
 
   //獲取商品資料
   useEffect(() => {
@@ -74,10 +73,7 @@ export default function Order() {
         name: order.name,
         address: order.address,
         tel: order.tel,
-        commodities: cartItems.map((item) => ({
-          ...commodities[item.commodityId],
-          count: item.count,
-        })),
+        commodities: cartItems,
         totalPrice,
       };
 
@@ -97,10 +93,12 @@ export default function Order() {
           address: "",
           tel: "",
         });
-        alert("訂單建立成功！ 按下確認回商品頁");
-        router.push("/commodity");
+        //清空前端購物車
+        clearCart();
+        alert("訂單建立成功！");
+        router.push("/orderComplete");
       } else {
-        console.error("錯誤:", data);
+        console.error("錯誤:", data.error);
         alert(data.error + "！");
       }
     } catch (error) {
@@ -196,70 +194,77 @@ export default function Order() {
           )}
         </For>
       </Stack>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack>
-          <Field.Root>
-            <Box pos="relative" w="full">
-              <Input
-                className="peer"
-                name="name"
-                placeholder=""
-                {...register("name", { required: "請輸入收件人姓名" })}
-                value={order.name}
-                onChange={handleChange}
-                isInvalid={!!errors.name}
-                m={3}
-                pl={2}
-              />
-              {errors.name && (
-                <Text color="red.500">{errors.name.message}</Text>
-              )}
-              <Field.Label css={floatingStyles}>收件人</Field.Label>
-            </Box>
-          </Field.Root>
-          <Field.Root>
-            <Box pos="relative" w="full">
-              <Input
-                className="peer"
-                name="address"
-                placeholder=""
-                {...register("address", {
-                  required: "請輸入收件地址",
-                })}
-                value={order.address}
-                onChange={handleChange}
-                m={3}
-                pl={2}
-                isInvalid={!!errors.address}
-              />
-              {errors.address && (
-                <Text color="red.500">{errors.address.message}</Text>
-              )}
-              <Field.Label css={floatingStyles}>收件人地址</Field.Label>
-            </Box>
-          </Field.Root>
+      <Flex justifyContent="center" mt={5}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={4} width="300px">
+            <Flex justifyContent="center">
+              <Text fontSize="2xl">總金額{totalPrice}元</Text>
+            </Flex>
+            <Field.Root>
+              <Box pos="relative" w="full">
+                <Input
+                  className="peer"
+                  name="name"
+                  placeholder=""
+                  {...register("name", { required: "請輸入收件人姓名" })}
+                  value={order.name}
+                  onChange={handleChange}
+                  isInvalid={!!errors.name}
+                  m={3}
+                />
+                {errors.name && (
+                  <Text color="red.500">{errors.name.message}</Text>
+                )}
+                <Field.Label css={floatingStyles}>收件人</Field.Label>
+              </Box>
+            </Field.Root>
+            <Field.Root>
+              <Box pos="relative" w="full">
+                <Input
+                  className="peer"
+                  name="address"
+                  placeholder=""
+                  {...register("address", {
+                    required: "請輸入收件地址",
+                  })}
+                  value={order.address}
+                  onChange={handleChange}
+                  m={3}
+                  width="full"
+                  isInvalid={!!errors.address}
+                />
+                {errors.address && (
+                  <Text color="red.500">{errors.address.message}</Text>
+                )}
+                <Field.Label css={floatingStyles}>收件人地址</Field.Label>
+              </Box>
+            </Field.Root>
 
-          <Field.Root>
-            <Box pos="relative" w="full">
-              <Input
-                className="peer"
-                name="tel"
-                placeholder=""
-                {...register("tel", { required: "請輸入收件人電話" })}
-                value={order.tel}
-                onChange={handleChange}
-                isInvalid={!!errors.tel}
-                m={3}
-                pl={2}
-                min={0}
-              />
-              {errors.tel && <Text color="red.500">{errors.tel.message}</Text>}
-              <Field.Label css={floatingStyles}>收件人電話</Field.Label>
-            </Box>
-          </Field.Root>
-          <Button type="submit">送出</Button>
-        </Stack>
-      </form>
+            <Field.Root>
+              <Box pos="relative" w="full">
+                <Input
+                  className="peer"
+                  name="tel"
+                  placeholder=""
+                  {...register("tel", { required: "請輸入收件人電話" })}
+                  value={order.tel}
+                  onChange={handleChange}
+                  isInvalid={!!errors.tel}
+                  m={3}
+                  min={0}
+                />
+                {errors.tel && (
+                  <Text color="red.500">{errors.tel.message}</Text>
+                )}
+                <Field.Label css={floatingStyles}>收件人電話</Field.Label>
+              </Box>
+            </Field.Root>
+            <Button type="submit" width="full">
+              送出
+            </Button>
+          </Stack>
+        </form>
+      </Flex>
       <Flex
         mx="auto"
         justifyContent="center"
@@ -267,8 +272,6 @@ export default function Order() {
         gap={4}
         mt={5}
       >
-        <Text fontSize="2xl">總金額{totalPrice}元</Text>
-        <Button onClick={() => ({})}>送出</Button>
         <Button onClick={() => router.push("/shoppingCart")} m={4}>
           回上一頁
         </Button>

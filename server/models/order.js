@@ -5,13 +5,11 @@ const orderSchema = new mongoose.Schema({
   name: { type: String, required: true },
   address: { type: String, required: true },
   tel: { type: String, required: true },
-  commdities: [
+  commodities: [
     {
-      commodityId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Commodity",
-        required: true,
-      },
+      commodityId: { type: String },
+      commodityName: { type: String },
+      count: { type: Number, default: 1 },
     },
   ],
   totalPrice: { type: Number, required: true },

@@ -148,7 +148,32 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
 app.post("/api/order", async (req, res) => {
   try {
     const { userEmail, name, address, tel, commodities, totalPrice } = req.body;
-    console.log(commodities);
+    //檢查必要欄位
+    if (
+      !userEmail ||
+      !name ||
+      !address ||
+      !tel ||
+      !commodities ||
+      !totalPrice
+    ) {
+      return res.status(400).json({ error: "缺少必要欄位" });
+    }
+    //查看購買數量有沒有超過庫存
+    for (const item of commodities) {
+      const commodity = await Commodity.findById(item.commodityId);
+      if (!commodity) {
+        return res
+          .status(404)
+          .json({ error: `商品 ${item.commodityName} 不存在` });
+      }
+      if (commodity.number < item.count) {
+        return res
+          .status(400)
+          .json({ error: `商品 ${item.commodityName} 庫存不足` });
+      }
+    }
+    //建立訂單
     const newOrder = new Order({
       userEmail,
       name,
@@ -157,7 +182,17 @@ app.post("/api/order", async (req, res) => {
       commodities,
       totalPrice,
     });
+    //更新庫存數量
+    for (const item of commodities) {
+      await Commodity.findByIdAndUpdate(item.commodityId, {
+        $inc: { number: -item.count },
+      });
+    }
+
     await newOrder.save();
+    //更新購物車狀態
+    await User.findOneAndUpdate({ email: userEmail }, { $set: { cart: [] } });
+
     res.status(200).json({ message: "訂單建立成功", data: newOrder });
   } catch (e) {
     res.status(500).json({ error: "訂單建立失敗", error: e.message });

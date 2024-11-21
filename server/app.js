@@ -11,6 +11,7 @@ const cors = require("cors");
 const bcrypt = require("bcrypt");
 const User = require("./models/User");
 const Commodity = require("./models/commodity");
+const Order = require("./models/order");
 const { url } = require("inspector");
 const { error } = require("console");
 const app = express();
@@ -135,7 +136,7 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
         url: `/images/${req.file.originalname}`,
       },
     });
-    console.log(imagePath);
+
     await newCommodity.save();
     res.status(200).json({ message: "商品上傳成功", data: newCommodity });
   } catch (error) {
@@ -143,10 +144,30 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
   }
 });
 
+//建立訂單
+app.post("/api/order", async (req, res) => {
+  try {
+    const { userEmail, name, address, tel, commodities, totalPrice } = req.body;
+    console.log(commodities);
+    const newOrder = new Order({
+      userEmail,
+      name,
+      address,
+      tel,
+      commodities,
+      totalPrice,
+    });
+    await newOrder.save();
+    res.status(200).json({ message: "訂單建立成功", data: newOrder });
+  } catch (e) {
+    res.status(500).json({ error: "訂單建立失敗", error: e.message });
+  }
+});
+
 //加入購物車
 app.patch("/api/addCart", async (req, res) => {
   try {
-    const { userEmail, commodityId, count } = req.body;
+    const { userEmail, commodityId, commodityName, count } = req.body;
 
     const user = await User.findOne({ email: userEmail });
 
@@ -166,9 +187,10 @@ app.patch("/api/addCart", async (req, res) => {
       //如果商品不存在 就加入商品
       user.cart.push({
         commodityId,
+        commodityName,
         count,
       });
-      console.log("添加新商品:", { commodityId, count });
+      console.log("添加新商品:", { commodityId, commodityName, count });
     }
 
     await user.save();
@@ -226,6 +248,22 @@ app.patch("/api/updateCart", async (req, res) => {
   } catch (e) {
     console.error("更新購物車數量發生錯誤", e);
     res.status(500).json({ message: "更新購物車數量失敗", error: e.message });
+  }
+});
+
+//移除購物車內已下架商品
+app.delete("/api/userCart/delete", async (req, res) => {
+  try {
+    const { userEmail, commodityId } = req.body;
+    const user = await User.findOne({ email: userEmail });
+    if (!user) {
+      return res.status(404).json({ message: " 用戶不存在" });
+    }
+    user.cart = user.cart.filter((item) => item.commodityId !== commodityId);
+    await user.save();
+    res.json({ message: "刪除購物車商品成功" });
+  } catch (e) {
+    res.status(500).json({ message: "刪除購物車商品失敗", error: e });
   }
 });
 

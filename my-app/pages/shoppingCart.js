@@ -13,7 +13,9 @@ export default function ShoppingCart() {
   const [commodities, setCommodities] = useState({});
   const { data: session } = useSession();
   const router = useRouter();
+  const userEmail = session?.user?.email;
   let totalPrice = 0;
+  console.log(cartItems);
 
   // 獲取商品詳細資訊
   useEffect(() => {
@@ -28,8 +30,23 @@ export default function ShoppingCart() {
             `http://localhost:5000/api/commodity/${item.commodityId}`
           );
           const data = await response.json();
-
+          //避免發生已放入的商品被刪除仍存在購物車中
           if (data.message === "商品未找到") {
+            const commodityId = validCartItems[i].commodityId;
+            const checkResponse = await fetch(
+              "http://localhost:5000/api/userCart/delete",
+              {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userEmail,
+                  commodityId,
+                }),
+              }
+            );
+            const checkData = await checkResponse.json();
             validCartItems.splice(i, 1);
             hasInvalidItems = true;
             i--;
@@ -154,7 +171,7 @@ export default function ShoppingCart() {
       </Stack>
       <Flex mx="auto" justifyContent="center" alignItems="center" gap={4}>
         <Text fontSize="2xl">總金額{totalPrice}元</Text>
-        <Button onClick={() => router.push("/demo")} m={4}>
+        <Button onClick={() => router.push("/order")} m={4}>
           結帳
         </Button>
       </Flex>

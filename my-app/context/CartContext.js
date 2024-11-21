@@ -30,7 +30,7 @@ export function CartProvider({ children }) {
   }, [userEmail]);
 
   // 加入購物車
-  const addToCart = async (commodityId, count) => {
+  const addToCart = async (commodityId, commodityName, count) => {
     if (!userEmail) {
       alert("請先登入");
       return false;
@@ -52,7 +52,7 @@ export function CartProvider({ children }) {
           return item;
         });
       } else {
-        newCartItems = [...cartItems, { commodityId, count }];
+        newCartItems = [...cartItems, { commodityId, commodityName, count }];
       }
       //給後端更新資料庫
       const response = await fetch("http://localhost:5000/api/addCart", {
@@ -63,6 +63,7 @@ export function CartProvider({ children }) {
         body: JSON.stringify({
           userEmail,
           commodityId,
+          commodityName,
           count,
         }),
       });

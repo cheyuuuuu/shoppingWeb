@@ -58,7 +58,8 @@ export default function CommodityDetail() {
   };
 
   const handleAddToCart = async () => {
-    const success = await addToCart(id, count);
+    const success = await addToCart(commodity._id, commodity.name, count);
+
     if (success) {
       alert("加入購物車成功");
     }

@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   cart: [
     {
       commodityId: { type: String },
+      commodityName: { type: String },
       count: { type: Number, default: 1 },
       addTime: { type: Date, default: Date.now },
     },

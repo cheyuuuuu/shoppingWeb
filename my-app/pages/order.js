@@ -25,6 +25,7 @@ export default function Order() {
     name: "",
     address: "",
     tel: "",
+    payment: "",
   });
   const router = useRouter();
   const {
@@ -34,6 +35,7 @@ export default function Order() {
   } = useForm();
   const userEmail = session?.user?.email;
   let totalPrice = 0;
+  const payment = ["超商貨到付款", "匯款/轉帳"];
 
   //獲取商品資料
   useEffect(() => {
@@ -63,7 +65,7 @@ export default function Order() {
 
   //處理訂單表單
   const onSubmit = async () => {
-    if (!order.name || !order.address || !order.tel) {
+    if (!order.name || !order.address || !order.tel || !order.payment) {
       alert("請填寫所有必填欄位！");
       return;
     }
@@ -75,6 +77,7 @@ export default function Order() {
         tel: order.tel,
         commodities: cartItems,
         totalPrice,
+        payment: order.payment,
       };
 
       const response = await fetch("http://localhost:5000/api/order", {
@@ -92,11 +95,12 @@ export default function Order() {
           name: "",
           address: "",
           tel: "",
+          payment: "",
         });
         //清空前端購物車
-        clearCart();
+        await clearCart();
         alert("訂單建立成功！");
-        router.push("/orderComplete");
+        await router.push("/orderComplete");
       } else {
         console.error("錯誤:", data.error);
         alert(data.error + "！");
@@ -257,6 +261,30 @@ export default function Order() {
                   <Text color="red.500">{errors.tel.message}</Text>
                 )}
                 <Field.Label css={floatingStyles}>收件人電話</Field.Label>
+              </Box>
+            </Field.Root>
+            <Field.Root>
+              <Box pos="relative" w="full" pl={3}>
+                <select
+                  name="type"
+                  style={{
+                    backgroundColor: "gray",
+                    border: "1px solid white",
+                    borderRadius: "3px",
+                  }}
+                  {...register("payment", { required: "請選擇付款方式" })}
+                  value={order.payment}
+                  defaultValue=""
+                  onChange={handleChange}
+                  isInvalid={!!errors.payment}
+                >
+                  <option value="" disabled>
+                    請選擇一個付款方式
+                  </option>
+                  {payment.map((type) => (
+                    <option value={type}>{type}</option>
+                  ))}
+                </select>
               </Box>
             </Field.Root>
             <Button type="submit" width="full">

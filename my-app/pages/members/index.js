@@ -24,6 +24,7 @@ export default function Dashboard() {
         <div>
           <h2>管理員控制台</h2>
           <p>這裡是只有管理員可以看到的內容。</p>
+          <Link href="/members/oldOrder">歷史訂單</Link>
         </div>
       ) : (
         <div>

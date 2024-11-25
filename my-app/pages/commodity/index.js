@@ -30,11 +30,11 @@ export default function Commodity() {
   return (
     <div>
       <Flex p={3} direction="row" h="100vh" w="100%">
-        <Box w="10%" h="100%" p={3} borderRadius="md">
+        <Box w="10%" h="100%" p={3} borderRadius="md" bg="gray">
           <CommoditySideBar />
         </Box>
         <Box p={2} pl={2}>
-          <BreadcrumbRoot m={0} pl={2}>
+          <BreadcrumbRoot m={0} pl={2} className="slideLeft">
             <Link href="/" style={{ color: "white" }}>
               首頁
             </Link>
@@ -53,6 +53,7 @@ export default function Commodity() {
                   m={1}
                   borderRadius="md"
                   bg={"gray"}
+                  className="slideDown"
                 >
                   <Image
                     src={`${process.env.NEXT_PUBLIC_BASE_URL}${commodity.image.url}`}

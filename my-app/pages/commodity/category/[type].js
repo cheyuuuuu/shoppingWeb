@@ -77,6 +77,8 @@ export default function CommoditiesType() {
           p={3}
           borderRight="1px"
           borderColor="gray.200"
+          borderRadius="md"
+          bg="gray"
         >
           <CommoditySideBar />
         </Box>

@@ -1,10 +1,10 @@
-import "@/styles/globals.css";
+import "@/public/styles/globals.css";
 import Layout from "@/components/layout";
 import { Provider } from "@/components/ui/provider";
 import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 import { CartProvider } from "@/context/CartContext";
-
+import "../public/styles/wickedcss.min.css";
 
 export default function App({
   Component,

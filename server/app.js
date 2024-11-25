@@ -159,6 +159,34 @@ app.patch("/api/edit", async (req, res) => {
   }
 });
 
+app.patch("/api/manner/order/status", async (req, res) => {
+  try {
+    const { updates } = req.body;
+
+    const updatePromises = Object.keys(updates).map(async (orderId) => {
+      const result = await Order.findByIdAndUpdate(
+        orderId,
+        { status: updates[orderId].status }, // 只更新狀態
+        { new: true } // 返回更新後的文檔
+      );
+
+      if (!result) {
+        throw new Error(`找不到訂單 ID: ${orderId}`);
+      }
+      return result;
+    });
+
+    const updatedOrders = await Promise.all(updatePromises);
+
+    res.status(200).json({
+      message: "訂單狀態更新成功",
+      updatedOrders,
+    });
+  } catch (e) {
+    res.status(500).json({ message: "狀態更新失敗", error: e.message });
+  }
+});
+
 //刪除商品&後端資料夾中的圖片
 app.delete("/api/delete", async (req, res) => {
   try {

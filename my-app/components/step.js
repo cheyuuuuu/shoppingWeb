@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import { Box } from "@/components/ui/button";
+import { RiShoppingCart2Line } from "react-icons/ri";
 import {
   StepsCompletedContent,
   StepsContent,
@@ -7,7 +7,9 @@ import {
   StepsList,
   StepsRoot,
 } from "@/components/ui/steps";
-import { LuCalendar, LuUser, LuWallet } from "react-icons/lu";
+
+import { MdOutlineBorderColor } from "react-icons/md";
+import { AiTwotoneGift } from "react-icons/ai";
 
 export default function Step({ currentStep = 0 }) {
   return (
@@ -20,9 +22,21 @@ export default function Step({ currentStep = 0 }) {
       >
         <StepsRoot defaultStep={currentStep} count={3}>
           <StepsList>
-            <StepsItem index={0} icon={<LuUser />} pointerEvents="none" />
-            <StepsItem index={1} icon={<LuWallet />} pointerEvents="none" />
-            <StepsItem index={2} icon={<LuWallet />} pointerEvents="none" />
+            <StepsItem
+              index={0}
+              icon={<RiShoppingCart2Line />}
+              pointerEvents="none"
+            />
+            <StepsItem
+              index={1}
+              icon={<MdOutlineBorderColor />}
+              pointerEvents="none"
+            />
+            <StepsItem
+              index={2}
+              icon={<AiTwotoneGift />}
+              pointerEvents="none"
+            />
           </StepsList>
 
           <StepsContent index={0}>第一步：檢視購物車</StepsContent>

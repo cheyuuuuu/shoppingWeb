@@ -14,6 +14,7 @@ const orderSchema = new mongoose.Schema({
   ],
   totalPrice: { type: Number, required: true },
   payment: { type: String, required: true },
+  status: { type: String, default: "未處理" },
 
   createTime: { type: Date, default: Date.now },
 });

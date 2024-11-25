@@ -122,6 +122,7 @@ export default function Order() {
   const floatingStyles = defineStyle({
     pos: "absolute",
     bg: "gray",
+    borderRadius: "md",
     px: "0.5",
     top: "-2",
     margin: "2",
@@ -160,11 +161,12 @@ export default function Order() {
               showColumnBorder
               stickyHeader
               borderRadius="md"
-              shadow="5px 5px 5px gray"
+              shadow="5px 5px 5px black"
               w={{ base: "100%", md: "80%", xl: "70%" }}
               justifyContent="center"
               mx="auto"
               mt={5}
+              bg="gray"
             >
               <Table.Header bg={"gray.300"}>
                 <Table.Row>

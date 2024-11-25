@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import SideBar from "@/components/sideBar";
 
-export default function Edit() {
+export default function OldOrder() {
   const [orders, setOrders] = useState([]);
   const { data: session } = useSession();
   const userEmail = session?.user?.email;
@@ -44,6 +44,7 @@ export default function Edit() {
                   overflowY="auto" // 添加垂直滾動
                   borderRadius="md"
                   shadow="5px 5px 5px gray, -5px 5px 5px gray"
+                  bg="gray"
                 >
                   <Table.Header>
                     <Table.Row>
@@ -68,6 +69,9 @@ export default function Edit() {
                       </Table.ColumnHeader>
                       <Table.ColumnHeader p={3} textAlign="center" width="5%">
                         付款方式
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader p={3} textAlign="center" width="5%">
+                        狀態
                       </Table.ColumnHeader>
                     </Table.Row>
                   </Table.Header>
@@ -116,6 +120,19 @@ export default function Edit() {
                         </Table.Cell>
                         <Table.Cell textAlign="center">
                           {item.payment}
+                        </Table.Cell>
+                        <Table.Cell textAlign="center">
+                          <Text
+                            color={
+                              item.status === "未處理"
+                                ? "#8B0000"
+                                : item.status === "已處理"
+                                ? "#556B2F"
+                                : "gray.500" // 已取消的狀態
+                            }
+                          >
+                            {item.status}
+                          </Text>
                         </Table.Cell>
                       </Table.Row>
                     ))}

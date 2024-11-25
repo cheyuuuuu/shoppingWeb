@@ -1,30 +1,32 @@
 .footer{
   text-align: center;
   padding: 5px;
-  background-color: rgba(201, 222, 110, 0.851);
   height: 50px;
+  margin-top: auto;  /* 自動推到底部 */
+  
+  position: relative;         /* 確保在流中 */
+  bottom: 0;                 /* 貼底 */
+  flex-shrink: 0;
 }
 
 .layoutContainer{
   display: flex;
   flex-direction: column;
   min-height: 100vh; 
- 
+  position: relative;
    /* 確保頁面至少填滿視窗高度 */
+  overflow-x: hidden;  /* 防止水平滾動 */
 }
 .mainContent {
   margin: 5px;
-  flex: 1;  
+  flex: 1 1 auto;  
   /* 自動填滿剩餘空間 */
+  display: flex;    /* 添加 flex 顯示 */
+  flex-direction: column;  /* 設置垂直方向 */
+  overflow-y: auto;  /* 允許內容滾動 */
+  min-height: 0;     /* 重要：允許內容收縮 */
 }
 .link{
   margin: 3px;
   font-size: 30px;
-}
-.navBar{
-  display: flex;
-  margin: 3px;
-  padding-right: 20px;
-  justify-content: right;
-  border: 2px solid red; 
 }

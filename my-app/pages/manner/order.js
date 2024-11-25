@@ -3,15 +3,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { For, Stack, Table, Flex, Box, Text, Grid } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
-import {
-  NumberInputField,
-  NumberInputRoot,
-} from "@/components/ui/number-input";
+
 import SideBar from "@/components/sideBar";
 
-export default function Edit() {
+export default function Order() {
   const [orders, setOrders] = useState([]);
-  const [checked, setChecked] = useState({});
+  const [updates, setUpdates] = useState({});
+  const types = ["未處理", "已處理", "已取消"];
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -25,6 +23,15 @@ export default function Edit() {
         );
         const data = await response.json();
         setOrders(data);
+        const initialUpdates = data.reduce((acc, item) => {
+          acc[item._id] = {
+            status: item.status,
+            isSelected: false,
+          };
+          return acc;
+        }, {});
+        setUpdates(initialUpdates);
+        console.log(updates);
       } catch (e) {
         console.error("獲取訂單資料失敗", e);
       }
@@ -41,40 +48,47 @@ export default function Edit() {
       },
     }));
   };
+  const handleChange = (id, e) => {
+    const value = e.target.value;
+    setUpdates((prev) => ({
+      ...prev,
+      [id]: { ...prev[id], status: value },
+    }));
+  };
 
-  //   const handleUpdate = async () => {
-  //     const selectedUpdates = Object.keys(updates)
-  //       .filter((id) => updates[id].isSelected)
-  //       .reduce((acc, id) => {
-  //         acc[id] = { price: updates[id].price, number: updates[id].number };
-  //         return acc;
-  //       }, {});
+  const handleUpdate = async () => {
+    const selectedUpdates = Object.keys(updates)
+      .filter((id) => updates[id].isSelected)
+      .reduce((acc, id) => {
+        acc[id] = { status: updates[id].status };
+        return acc;
+      }, {});
 
-  //     if (Object.keys(selectedUpdates).length === 0) {
-  //       alert("請先勾選需要修改的商品");
-  //       return;
-  //     }
+    if (Object.keys(selectedUpdates).length === 0) {
+      alert("請先勾選需要修改的商品");
+      return;
+    }
 
-  //     try {
-  //       const response = await fetch(
-  //         "http://localhost:5000/api/manner/order/check",
-  //         {
-  //           method: "PATCH",
-  //           headers: { "Content-Type": "application/json" },
-  //           body: JSON.stringify({ updates: selectedUpdates }),
-  //         }
-  //       );
-  //       const result = await response.json();
-  //       if (response.ok) {
-  //         console.log("更新成功", result);
-  //         alert("修改成功！");
-  //       } else {
-  //         console.error("更新失敗", result.message);
-  //       }
-  //     } catch (e) {
-  //       console.error("更新商品資料失敗", e);
-  //     }
-  //   };
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/manner/order/status",
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ updates: selectedUpdates }),
+        }
+      );
+      const result = await response.json();
+      if (response.ok) {
+        console.log("更新成功", result);
+        alert("修改成功！");
+      } else {
+        console.error("更新失敗", result.message);
+      }
+    } catch (e) {
+      console.error("更新商品資料失敗", e);
+    }
+  };
 
   return (
     <div>
@@ -96,6 +110,7 @@ export default function Edit() {
                   overflowY="auto" // 添加垂直滾動
                   borderRadius="md"
                   shadow="5px 5px 5px gray, -5px 5px 5px gray"
+                  bg="gray"
                 >
                   <Table.Header>
                     <Table.Row>
@@ -124,6 +139,9 @@ export default function Edit() {
                       <Table.ColumnHeader p={3} textAlign="center" width="5%">
                         付款方式
                       </Table.ColumnHeader>
+                      <Table.ColumnHeader p={3} textAlign="center" width="3%">
+                        狀態
+                      </Table.ColumnHeader>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
@@ -143,10 +161,10 @@ export default function Edit() {
                               colorPalette="gray"
                               type="checkbox"
                               size="md"
-                              // checked={orders[item._id].isSelected || false}
-                              // onCheckedChange={() =>
-                              //   handleCheckBoxChange(orders._id)
-                              // }
+                              checked={updates[item._id].isSelected || false}
+                              onCheckedChange={() =>
+                                handleCheckBoxChange(item._id)
+                              }
                             ></Checkbox>
                           </Flex>
                         </Table.Cell>
@@ -194,6 +212,26 @@ export default function Edit() {
                         <Table.Cell textAlign="center">
                           {item.payment}
                         </Table.Cell>
+                        <Table.Cell textAlign="center">
+                          <select
+                            name={`status-${item._id}`}
+                            style={{
+                              backgroundColor: "gray",
+                              border: "1px solid white",
+                              borderRadius: "3px",
+                            }}
+                            value={updates[item._id]?.status || item.status}
+                            onChange={(e) => handleChange(item._id, e)}
+                            disabled={!updates[item._id]?.isSelected}
+                          >
+                            <option value="" disabled>
+                              請選擇一個狀態
+                            </option>
+                            {types.map((type) => (
+                              <option value={type}>{type}</option>
+                            ))}
+                          </select>
+                        </Table.Cell>
                       </Table.Row>
                     ))}
                   </Table.Body>
@@ -201,7 +239,7 @@ export default function Edit() {
               )}
             </For>
           </Stack>
-          {/* <Button
+          <Button
             onClick={handleUpdate}
             size="sm"
             m={5}
@@ -209,8 +247,8 @@ export default function Edit() {
             variant="surface"
           >
             <FaEdit />
-            修改
-          </Button> */}
+            更新
+          </Button>
         </Box>
       </Flex>
     </div>

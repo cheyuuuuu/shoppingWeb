@@ -4,7 +4,7 @@ import { types } from "@/data/commodityTypes";
 
 export default function CommoditySideBar() {
   return (
-    <Stack>
+    <Stack className="fadeIn">
       <Flex
         direction="column"
         h="100%"

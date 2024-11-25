@@ -75,11 +75,13 @@ export default function CommodityDetail() {
           p={3}
           borderRight="1px"
           borderColor="gray.200"
+          borderRadius="md"
+          bg="gray"
         >
           <CommoditySideBar />
         </Box>
-        <Box w={{ base: "80%", lg: "30%" }}>
-          <BreadcrumbRoot m={2}>
+        <Box w={{ base: "80%", lg: "30%" }} pl={2}>
+          <BreadcrumbRoot m={2} className="slideLeft">
             <Link href="/" style={{ color: "white" }}>
               首頁
             </Link>
@@ -104,6 +106,7 @@ export default function CommodityDetail() {
             m={1}
             borderRadius="md"
             bg={"gray"}
+            className="slideDown"
           >
             <Image
               src={`${process.env.NEXT_PUBLIC_BASE_URL}${commodity.image.url}`}
@@ -113,7 +116,7 @@ export default function CommodityDetail() {
               mx="auto"
               borderRadius="md"
             />
-            <Box p="4" spaceY="5">
+            <Box p="4" spaceY="5" className="zoomer">
               <HStack>
                 <Badge colorPalette="teal" variant="solid" p="1">
                   new
@@ -136,6 +139,7 @@ export default function CommodityDetail() {
         <Box
           w={{ base: "100%", md: "15%" }} // 響應式寬度
           p={4}
+          className="zoomer"
         >
           <Stack spacing={4} w="full">
             <Text pl={2}>數量：</Text>
@@ -147,6 +151,7 @@ export default function CommodityDetail() {
               max={commodity.number}
               w="100px"
               mb={2}
+              spinOnPress="false"
             />
             <Button
               onClick={handleAddToCart}

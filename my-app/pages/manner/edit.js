@@ -138,7 +138,8 @@ export default function Edit() {
                   showColumnBorder
                   stickyHeader
                   borderRadius="md"
-                  shadow="5px 5px 5px gray, -5px 5px 5px gray"
+                  shadow="5px 5px 5px black, -5px 5px 5px gray"
+                  bg="gray"
                 >
                   <Table.Header>
                     <Table.Row>

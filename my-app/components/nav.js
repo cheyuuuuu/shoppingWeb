@@ -29,12 +29,17 @@ export default function Nav() {
     await signOut({ redirect: false }); // 停用 redirect，手動控制跳轉
     router.push("/"); // 手動跳轉到首頁
   };
+  const tabStyles = {
+    color: "white",
+    _hover: { color: "gray" }, // 懸停時的顏色
+    _selected: { color: "black" }, // 選中時的顏色
+  };
 
   return (
     <Tabs.Root defaultValue={activeTab} variant="plain">
       <Flex
-        justifyContent="flex"
-        bg="#B4A582"
+        justifyContent="center"
+        bg="#899199"
         rounded="l3"
         h="60px"
         pl="2%"
@@ -43,31 +48,56 @@ export default function Nav() {
       >
         <Tabs.List className={styles.list}>
           <Link href="/">
-            <Tabs.Trigger value="home" padding="3" textStyle="xl">
+            <Tabs.Trigger
+              value="home"
+              padding="3"
+              textStyle="xl"
+              {...tabStyles}
+            >
               <IoHome />
               首頁
             </Tabs.Trigger>
           </Link>
           <Link href="/about">
-            <Tabs.Trigger value="about" padding="3" textStyle="xl">
+            <Tabs.Trigger
+              value="about"
+              padding="3"
+              textStyle="xl"
+              {...tabStyles}
+            >
               <CiTextAlignCenter />
               關於
             </Tabs.Trigger>
           </Link>
           <Link href="/commodity">
-            <Tabs.Trigger value="commodity" padding="3" textStyle="xl">
+            <Tabs.Trigger
+              value="commodity"
+              padding="3"
+              textStyle="xl"
+              {...tabStyles}
+            >
               <PiCoffeeBeanFill />
               商品
             </Tabs.Trigger>
           </Link>
           <Link href="/members">
-            <Tabs.Trigger value="members" padding="3" textStyle="xl">
+            <Tabs.Trigger
+              value="members"
+              padding="3"
+              textStyle="xl"
+              {...tabStyles}
+            >
               <FaAddressCard />
               會員
             </Tabs.Trigger>
           </Link>
           <Link href="/shoppingCart">
-            <Tabs.Trigger value="shoppingCart" padding="1" textStyle="xl">
+            <Tabs.Trigger
+              value="shoppingCart"
+              padding="1"
+              textStyle="xl"
+              {...tabStyles}
+            >
               <FaShoppingCart />
               購物車
               <Box
@@ -85,7 +115,12 @@ export default function Nav() {
             </Tabs.Trigger>
           </Link>
           <Link href="/demo">
-            <Tabs.Trigger value="demo" padding="3" textStyle="xl">
+            <Tabs.Trigger
+              value="demo"
+              padding="3"
+              textStyle="xl"
+              {...tabStyles}
+            >
               <FaShoppingCart />
               測試
             </Tabs.Trigger>
@@ -93,7 +128,12 @@ export default function Nav() {
           <Tabs.Indicator rounded="l3" />
           {session ? (
             <div>
-              <Tabs.Trigger value="demo" padding="3" textStyle="xl">
+              <Tabs.Trigger
+                value="demo"
+                padding="3"
+                textStyle="xl"
+                {...tabStyles}
+              >
                 <FaSignOutAlt />
                 <button onClick={handleSignOut}>登出</button>
               </Tabs.Trigger>
@@ -103,7 +143,12 @@ export default function Nav() {
             <div>
               {session.user.role === "admin" && (
                 <Link href="/manner">
-                  <Tabs.Trigger value="manner" padding="3" textStyle="xl">
+                  <Tabs.Trigger
+                    value="manner"
+                    padding="3"
+                    textStyle="xl"
+                    {...tabStyles}
+                  >
                     <IoDocumentText />
                     管理區
                   </Tabs.Trigger>

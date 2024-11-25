@@ -1,33 +1,45 @@
-import { Button } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-export default function Demo() {
-  const { handleSubmit, register } = useForm();
-  const onSubmit = async (data) => {
-    console.log(data);
-  };
-  const types = ["dog", "cat", "shrimp", "fish"];
+import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+import Register from "@/components/register";
+import { Box, Flex } from "@chakra-ui/react";
+import MemberSideBar from "@/components/memberSideBar";
+
+export default function Dashboard() {
+  const { data: session } = useSession();
+
+  if (!session) {
+    return (
+      <div>
+        <Flex justify="center" align="center" flexDirection="column">
+          <Register />
+        </Flex>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <select
-          name="pets"
-          style={{ backgroundColor: "gray" }}
-          defaultValue=""
-          {...register("pets", {
-            required: "請選擇一個寵物",
-          })}
-        >
-          <option value="" disabled>
-            請選擇你最愛的寵物
-          </option>
-          {types.map((type) => (
-            <option value={type}>{type}</option>
-          ))}
-        </select>
-        <Button type="submit" m={3}>
-          送出
-        </Button>
-      </form>
+      <Flex p={3} direction="row" h="100vh" w="100%">
+        <Box w="10%" h="100%" p={3} borderRadius="md">
+          <MemberSideBar />
+        </Box>
+        <Box p={2} pl={2}>
+          <h1>歡迎, {session.user.name}</h1>
+          {session.user.role === "admin" ? (
+            <div>
+              <h2>管理員控制台</h2>
+              <p>這裡是只有管理員可以看到的內容。</p>
+              <Link href="/members/oldOrder">歷史訂單</Link>
+            </div>
+          ) : (
+            <div>
+              <p>這裡可以瀏覽您的個人資料。</p>
+              <Link href="/shoppingCart">查看購物車</Link>
+            </div>
+          )}
+          <button onClick={() => signOut()}>登出</button>
+        </Box>
+      </Flex>
     </div>
   );
 }

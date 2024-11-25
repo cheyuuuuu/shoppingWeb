@@ -15,7 +15,6 @@ export default function ShoppingCart() {
   const router = useRouter();
   const userEmail = session?.user?.email;
   let totalPrice = 0;
-  console.log(cartItems);
 
   // 獲取商品詳細資訊
   useEffect(() => {
@@ -105,11 +104,12 @@ export default function ShoppingCart() {
               showColumnBorder
               stickyHeader
               borderRadius="md"
-              shadow="5px 5px 5px gray"
+              shadow="5px 5px 5px black"
               w={{ base: "100%", md: "80%", xl: "70%" }}
               justifyContent="center"
               mx="auto"
               mt={5}
+              bg="gray"
             >
               <Table.Header bg={"gray.300"}>
                 <Table.Row>

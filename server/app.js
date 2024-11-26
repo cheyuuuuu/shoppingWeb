@@ -309,6 +309,21 @@ app.get("/api/user/:email", async (req, res) => {
   }
 });
 
+//會員獲得個人資料
+app.get("/api/members/profile/:userEmail", async (req, res) => {
+  try {
+    const { userEmail } = req.params;
+    const user = await User.findOne({ email: userEmail });
+
+    if (!user) {
+      return res.status(404).json({ message: "會員不存在" });
+    }
+    res.status(200).json(user);
+  } catch (e) {
+    res.status(500).json({ message: "獲取會員資料失敗", error: e });
+  }
+});
+
 //會員獲得歷史訂單
 
 app.get("/api/members/oldOrders/:userEmail", async (req, res) => {

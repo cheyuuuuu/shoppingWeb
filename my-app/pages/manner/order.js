@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { For, Stack, Table, Flex, Box, Text, Grid } from "@chakra-ui/react";
+import {
+  For,
+  Stack,
+  Table,
+  Flex,
+  Box,
+  Text,
+  Grid,
+  List,
+} from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
@@ -186,24 +195,22 @@ export default function Order() {
                             alignItems="center"
                             w="100%"
                           >
-                            {item.commodities.map((i, index) => (
-                              <Flex
-                                key={index}
-                                direction="row"
-                                align="center"
-                                justify="left"
-                                gap={4}
-                                pl={1}
-                              >
-                                <Text whiteSpace="nowrap" color="red.600">
-                                  {index + 1}.
-                                </Text>
-                                <Text whiteSpace="nowrap">
-                                  商品：{i.commodityName}
-                                </Text>
-                                <Text whiteSpace="nowrap">數量：{i.count}</Text>
-                              </Flex>
-                            ))}
+                            <List.Root as="ol">
+                              {item.commodities.map((i, index) => (
+                                <Flex
+                                  key={index}
+                                  direction="row"
+                                  align="center"
+                                  justify="left"
+                                  gap={4}
+                                  pl={1}
+                                >
+                                  <List.Item _marker={{ color: "yellow" }}>
+                                    商品：{i.commodityName} ， 數量：{i.count}
+                                  </List.Item>
+                                </Flex>
+                              ))}
+                            </List.Root>
                           </Grid>
                         </Table.Cell>
                         <Table.Cell textAlign="center">

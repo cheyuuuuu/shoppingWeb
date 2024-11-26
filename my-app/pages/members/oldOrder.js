@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
-
-import { For, Stack, Table, Flex, Box, Text, Grid } from "@chakra-ui/react";
-import { Button } from "@/components/ui/button";
+import {
+  For,
+  Stack,
+  Table,
+  Flex,
+  Box,
+  Text,
+  Grid,
+  List,
+} from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import SideBar from "@/components/sideBar";
+import MemberSideBar from "@/components/memberSideBar";
 
 export default function OldOrder() {
   const [orders, setOrders] = useState([]);
@@ -30,6 +37,9 @@ export default function OldOrder() {
   return (
     <div>
       <Flex p={3} direction="row" h="100vh" w="100%">
+        <Box w="10%" h="100%" bg="gray" borderRadius="md" pt={3}>
+          <MemberSideBar />
+        </Box>
         <Box w="90%" h="100%" p={3} overflowY="auto">
           <Stack gap="10" m={5}>
             <For each={["outline"]}>
@@ -43,7 +53,7 @@ export default function OldOrder() {
                   maxH="calc(100vh - 100px)" // 設置最大高度
                   overflowY="auto" // 添加垂直滾動
                   borderRadius="md"
-                  shadow="5px 5px 5px gray, -5px 5px 5px gray"
+                  shadow="5px 5px 5px black, -5px 5px 5px gray"
                   bg="gray"
                 >
                   <Table.Header>
@@ -95,24 +105,22 @@ export default function OldOrder() {
                             alignItems="center"
                             w="100%"
                           >
-                            {item.commodities.map((i, index) => (
-                              <Flex
-                                key={index}
-                                direction="row"
-                                align="center"
-                                justify="left"
-                                gap={4}
-                                pl={1}
-                              >
-                                <Text whiteSpace="nowrap" color="red.600">
-                                  {index + 1}.
-                                </Text>
-                                <Text whiteSpace="nowrap">
-                                  商品：{i.commodityName}
-                                </Text>
-                                <Text whiteSpace="nowrap">數量：{i.count}</Text>
-                              </Flex>
-                            ))}
+                            <List.Root as="ol">
+                              {item.commodities.map((i, index) => (
+                                <Flex
+                                  key={index}
+                                  direction="row"
+                                  align="center"
+                                  justify="left"
+                                  gap={4}
+                                  pl={1}
+                                >
+                                  <List.Item _marker={{ color: "yellow" }}>
+                                    商品：{i.commodityName} ， 數量：{i.count}
+                                  </List.Item>
+                                </Flex>
+                              ))}
+                            </List.Root>
                           </Grid>
                         </Table.Cell>
                         <Table.Cell textAlign="center">

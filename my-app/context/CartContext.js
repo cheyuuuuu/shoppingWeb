@@ -15,7 +15,7 @@ export function CartProvider({ children }) {
       if (userEmail) {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/user/${userEmail}`
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/${userEmail}`
           );
           const data = await response.json();
           if (response.ok && data.cart) {
@@ -55,18 +55,21 @@ export function CartProvider({ children }) {
         newCartItems = [...cartItems, { commodityId, commodityName, count }];
       }
       //給後端更新資料庫
-      const response = await fetch("http://localhost:5000/api/addCart", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userEmail,
-          commodityId,
-          commodityName,
-          count,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/addCart`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userEmail,
+            commodityId,
+            commodityName,
+            count,
+          }),
+        }
+      );
 
       if (response.ok) {
         setCartItems(newCartItems);
@@ -92,11 +95,14 @@ export function CartProvider({ children }) {
   const updateCartItemCount = async (commodityId, newCount) => {
     if (!userEmail || newCount < 0) return false;
     try {
-      const response = await fetch("http://localhost:5000/api/updateCart", {
-        method: "PATCH",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ userEmail, commodityId, count: newCount }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/updateCart`,
+        {
+          method: "PATCH",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({ userEmail, commodityId, count: newCount }),
+        }
+      );
       if (response.ok) {
         setCartItems((prev) =>
           prev.map((item) =>
@@ -117,16 +123,19 @@ export function CartProvider({ children }) {
   //從購物車移除商品
   const removeFromCart = async (commodityId) => {
     try {
-      const response = await fetch("http://localhost:5000/api/removeFromCart", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userEmail,
-          commodityId,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/removeFromCart`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userEmail,
+            commodityId,
+          }),
+        }
+      );
       if (response.ok) {
         setCartItems((prevItems) =>
           prevItems.filter((item) => item.commodityId !== commodityId)

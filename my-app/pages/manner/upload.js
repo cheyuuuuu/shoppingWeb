@@ -65,10 +65,13 @@ export default function Upload() {
     formData.append("number", commodity.number);
     formData.append("image", commodity.image);
 
-    const response = await fetch("http://localhost:5000/api/upload", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
     const data = await response.json();
     if (response.ok) {

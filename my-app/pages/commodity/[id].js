@@ -35,7 +35,7 @@ export default function CommodityDetail() {
     if (id) {
       const fetchProduct = async () => {
         const response = await fetch(
-          `http://localhost:5000/api/commodity/${id}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/commodity/${id}`,
           {
             method: "GET",
             cache: "no-store",

@@ -14,7 +14,7 @@ export default function OldOrder() {
       const fetchUser = async () => {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/members/profile/${userEmail}`
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/members/profile/${userEmail}`
           );
           const data = await response.json();
           setProfile(data);

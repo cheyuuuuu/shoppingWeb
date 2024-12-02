@@ -24,7 +24,7 @@ export default function CommoditiesType() {
           const encodedType = encodeURIComponent(type);
           console.log("Fetching type:", encodedType);
           const response = await fetch(
-            `http://localhost:5000/api/commodity/category/${encodedType}`, // 修改 API 路徑
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/commodity/category/${encodedType}`, // 修改 API 路徑
             {
               method: "GET",
               cache: "no-store",

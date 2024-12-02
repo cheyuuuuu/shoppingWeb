@@ -91,7 +91,7 @@ export default function Register() {
       </Text>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={4} spaceY={5} m={3}>
-          <Field.Root>
+          <Field.Root isInvalid={!!errors.name}>
             <Box pos="relative" w="full">
               <Input
                 className="peer"
@@ -99,7 +99,6 @@ export default function Register() {
                 {...register("name", { required: "※請輸入姓名" })}
                 value={user.name}
                 onChange={handleChange}
-                isInvalid={!!errors.name}
                 p={2}
               />
               <Field.Label css={floatingStyles}>姓名</Field.Label>
@@ -108,7 +107,7 @@ export default function Register() {
               )}
             </Box>
           </Field.Root>
-          <Field.Root>
+          <Field.Root isInvalid={!!errors.email}>
             <Box pos="relative" w="full">
               <Input
                 type="email"
@@ -117,7 +116,6 @@ export default function Register() {
                 {...register("email", { required: "※請輸入電子郵件" })}
                 value={user.email}
                 onChange={handleChange}
-                isInvalid={!!errors.email}
                 p={2}
               />
               <Field.Label css={floatingStyles}>電子郵件</Field.Label>
@@ -126,7 +124,7 @@ export default function Register() {
               )}
             </Box>
           </Field.Root>
-          <Field.Root>
+          <Field.Root isInvalid={!!errors.password}>
             <Box pos="relative" w="full">
               <Input
                 type="password"
@@ -135,7 +133,6 @@ export default function Register() {
                 {...register("password", { required: "※請輸入密碼" })}
                 value={user.password}
                 onChange={handleChange}
-                isInvalid={!!errors.password}
                 p={2}
               />
               <Field.Label css={floatingStyles}>密碼</Field.Label>
@@ -151,7 +148,7 @@ export default function Register() {
         </Stack>
       </form>
       <Flex mt={4} justifyContent="center" mx="auto">
-        <Link href="/members" style={{ display: "inline-block" }}>
+        <Link href="/" style={{ display: "inline-block" }}>
           <Text color="white" mt="1" textStyle="xl">
             回上一頁
           </Text>

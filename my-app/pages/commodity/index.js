@@ -13,10 +13,13 @@ export default function Commodity() {
   useEffect(() => {
     const fetchCommodities = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/commodities", {
-          method: "GET",
-          cache: "no-store",
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/commodities`,
+          {
+            method: "GET",
+            cache: "no-store",
+          }
+        );
         const data = await response.json();
         setCommodities(data);
       } catch (e) {
@@ -44,9 +47,8 @@ export default function Commodity() {
           </BreadcrumbRoot>
           <Flex wrap="wrap" spacing={4}>
             {commodities.map((commodity) => (
-              <Link href={`/commodity/${commodity._id}`}>
+              <Link href={`/commodity/${commodity._id}`} key={commodity._id}>
                 <Box
-                  key={commodity._id}
                   maxW="sm"
                   p={2}
                   w={200}
@@ -68,7 +70,7 @@ export default function Commodity() {
                         新
                       </Badge>
                       <HStack gap="1" fontWeight="medium">
-                        <Icon color="orange.400">
+                        <Icon as={HiStar} color="orange.400">
                           <HiStar />
                         </Icon>
                         <Text textStyle="2xl">{commodity.name}</Text>

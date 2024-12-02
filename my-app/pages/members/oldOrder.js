@@ -22,7 +22,7 @@ export default function OldOrder() {
       const fetchOrder = async () => {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/members/oldOrders/${userEmail}`
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/members/oldOrders/${userEmail}`
           );
           const data = await response.json();
           setOrders(data);

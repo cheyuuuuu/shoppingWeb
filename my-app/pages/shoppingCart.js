@@ -26,14 +26,14 @@ export default function ShoppingCart() {
         const item = validCartItems[i];
         try {
           const response = await fetch(
-            `http://localhost:5000/api/commodity/${item.commodityId}`
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/commodity/${item.commodityId}`
           );
           const data = await response.json();
           //避免發生已放入的商品被刪除仍存在購物車中
           if (data.message === "商品未找到") {
             const commodityId = validCartItems[i].commodityId;
             const checkResponse = await fetch(
-              "http://localhost:5000/api/userCart/delete",
+              `${process.env.NEXT_PUBLIC_BASE_URL}/api/userCart/delete`,
               {
                 method: "DELETE",
                 headers: {

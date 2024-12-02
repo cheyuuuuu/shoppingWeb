@@ -44,7 +44,7 @@ export default function Order() {
       for (const item of cartItems) {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/commodity/${item.commodityId}`
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/commodity/${item.commodityId}`
           );
           const data = await response.json();
           commodityDetails[item.commodityId] = data;
@@ -80,13 +80,16 @@ export default function Order() {
         payment: order.payment,
       };
 
-      const response = await fetch("http://localhost:5000/api/order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/order`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
 
       const data = await response.json();
       if (response.ok) {
@@ -217,6 +220,7 @@ export default function Order() {
                   onChange={handleChange}
                   isInvalid={!!errors.name}
                   m={3}
+                  pl={2}
                 />
                 {errors.name && (
                   <Text color="red.500">{errors.name.message}</Text>
@@ -236,6 +240,7 @@ export default function Order() {
                   value={order.address}
                   onChange={handleChange}
                   m={3}
+                  pl={2}
                   width="full"
                   isInvalid={!!errors.address}
                 />
@@ -257,6 +262,7 @@ export default function Order() {
                   onChange={handleChange}
                   isInvalid={!!errors.tel}
                   m={3}
+                  pl={2}
                   min={0}
                 />
                 {errors.tel && (

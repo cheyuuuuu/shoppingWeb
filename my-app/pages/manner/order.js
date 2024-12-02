@@ -24,7 +24,7 @@ export default function Order() {
     const fetchOrder = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/manner/orders",
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/manner/orders`,
           {
             method: "GET",
             cache: "no-store",
@@ -80,7 +80,7 @@ export default function Order() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/manner/order/status",
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/manner/order/status`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

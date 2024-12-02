@@ -49,7 +49,6 @@ const upload = multer();
 
 // 會員註冊
 app.post("/api/register", async (req, res) => {
-  // console.log(req.body);
   const { name, email, password } = req.body;
   let role = req.body.role || "user";
   try {

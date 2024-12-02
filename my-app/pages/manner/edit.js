@@ -16,10 +16,13 @@ export default function Edit() {
   useEffect(() => {
     const fetchCommodities = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/commodities", {
-          method: "GET",
-          cache: "no-store",
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/commodities`,
+          {
+            method: "GET",
+            cache: "no-store",
+          }
+        );
         const data = await response.json();
         setCommodities(data);
         // 初始化更新的資料結構
@@ -70,11 +73,14 @@ export default function Edit() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/delete", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ deletes: selectedDelete }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/delete`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ deletes: selectedDelete }),
+        }
+      );
       const result = await response.json();
       if (response.ok) {
         console.log("刪除成功", result);
@@ -104,11 +110,14 @@ export default function Edit() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/edit", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ updates: selectedUpdates }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/edit`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ updates: selectedUpdates }),
+        }
+      );
       const result = await response.json();
       if (response.ok) {
         console.log("更新成功", result);

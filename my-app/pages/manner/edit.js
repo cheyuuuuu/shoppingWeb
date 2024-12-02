@@ -172,25 +172,31 @@ export default function Edit() {
                   </Table.Header>
                   <Table.Body>
                     {commodities.map((commodity) => (
-                      <Table.Row key={commodity.id}>
-                        <Flex
-                          align="center"
-                          justify="center"
-                          w="100%"
-                          h="100%"
-                          marginTop="4"
-                        >
-                          <Checkbox
-                            variant="subtle"
-                            colorPalette="gray"
-                            type="checkbox"
-                            size="md"
-                            checked={updates[commodity._id].isSelected || false}
-                            onCheckedChange={() =>
-                              handleCheckBoxChange(commodity._id)
-                            }
-                          ></Checkbox>
-                        </Flex>
+                      <Table.Row key={commodity._id}>
+                        <Table.Cell>
+                          <Flex
+                            key={`flex-${commodity._id}`}
+                            align="center"
+                            justify="center"
+                            w="100%"
+                            h="100%"
+                            marginTop="4"
+                          >
+                            <Checkbox
+                              key={`checkbox-${commodity._id}`}
+                              variant="subtle"
+                              colorPalette="gray"
+                              type="checkbox"
+                              size="md"
+                              checked={
+                                updates[commodity._id].isSelected || false
+                              }
+                              onCheckedChange={() =>
+                                handleCheckBoxChange(commodity._id)
+                              }
+                            ></Checkbox>
+                          </Flex>
+                        </Table.Cell>
                         <Table.Cell textAlign="center">
                           {commodity.name}
                         </Table.Cell>

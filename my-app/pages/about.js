@@ -55,7 +55,7 @@ export default function About() {
               textStyle="xl"
               className="fadeIn"
             >
-              AWS
+              AWS EC2
             </List.Item>
           </List.Root>
         </List.Item>
@@ -75,7 +75,7 @@ export default function About() {
               textStyle="xl"
               className="slideUp"
             >
-              管理員區：商品上架、下架、修改庫存及價格、訂單管理變更狀態
+              管理員區：商品上架、下架、修改庫存及價格、訂單管理狀態變更
             </List.Item>
             <List.Item
               _marker={{ color: "black" }}

@@ -40,7 +40,6 @@ export default function Order() {
           return acc;
         }, {});
         setUpdates(initialUpdates);
-        console.log(updates);
       } catch (e) {
         console.error("獲取訂單資料失敗", e);
       }
@@ -235,7 +234,9 @@ export default function Order() {
                               請選擇一個狀態
                             </option>
                             {types.map((type) => (
-                              <option value={type}>{type}</option>
+                              <option key={type} value={type}>
+                                {type}
+                              </option>
                             ))}
                           </select>
                         </Table.Cell>

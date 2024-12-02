@@ -145,7 +145,7 @@ export default function Upload() {
               </Flex>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack>
-                  <Field.Root>
+                  <Field.Root isInvalid={!!errors.name}>
                     <Box pos="relative" w="full">
                       <Input
                         className="peer"
@@ -154,7 +154,6 @@ export default function Upload() {
                         {...register("name", { required: "請輸入商品名稱" })}
                         value={commodity.name}
                         onChange={handleChange}
-                        isInvalid={!!errors.name}
                         m={3}
                         pl={2}
                       />
@@ -164,7 +163,7 @@ export default function Upload() {
                       <Field.Label css={floatingStyles}>商品名稱</Field.Label>
                     </Box>
                   </Field.Root>
-                  <Field.Root>
+                  <Field.Root isInvalid={!!errors.description}>
                     <Box pos="relative" w="full">
                       <Input
                         className="peer"
@@ -177,7 +176,6 @@ export default function Upload() {
                         onChange={handleChange}
                         m={3}
                         pl={2}
-                        isInvalid={!!errors.description}
                       />
                       {errors.description && (
                         <Text color="red.500">
@@ -187,7 +185,7 @@ export default function Upload() {
                       <Field.Label css={floatingStyles}>商品描述</Field.Label>
                     </Box>
                   </Field.Root>
-                  <Field.Root>
+                  <Field.Root isInvalid={!!errors.type}>
                     <Box pos="relative" w="full" pl={3}>
                       <select
                         name="type"
@@ -198,21 +196,21 @@ export default function Upload() {
                         }}
                         {...register("type", { required: "請選擇商品類型" })}
                         value={commodity.type}
-                        defaultValue=""
                         onChange={handleChange}
-                        isInvalid={!!errors.type}
                       >
                         <option value="" disabled>
                           請選擇一個類型
                         </option>
                         {types.map((type) => (
-                          <option value={type}>{type}</option>
+                          <option key={type} value={type}>
+                            {type}
+                          </option>
                         ))}
                       </select>
                     </Box>
                   </Field.Root>
 
-                  <Field.Root>
+                  <Field.Root isInvalid={!!errors.price}>
                     <Box pos="relative" w="full">
                       <Input
                         className="peer"
@@ -222,7 +220,6 @@ export default function Upload() {
                         {...register("price", { required: "請輸入商品價格" })}
                         value={commodity.price}
                         onChange={handleChange}
-                        isInvalid={!!errors.price}
                         m={3}
                         pl={2}
                         min={0}
@@ -233,7 +230,7 @@ export default function Upload() {
                       <Field.Label css={floatingStyles}>商品價格</Field.Label>
                     </Box>
                   </Field.Root>
-                  <Field.Root>
+                  <Field.Root isInvalid={!!errors.number}>
                     <Box pos="relative" w="full">
                       <Input
                         className="peer"
@@ -243,7 +240,6 @@ export default function Upload() {
                         {...register("number", { required: "請輸入庫存數量" })}
                         value={commodity.number}
                         onChange={handleChange}
-                        isInvalid={!!errors.number}
                         m={3}
                         pl={2}
                         min={0}

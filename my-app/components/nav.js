@@ -8,6 +8,7 @@ import { PiCoffeeBeanFill } from "react-icons/pi";
 import styles from "./Nav.module.css";
 import { useSession, signOut } from "next-auth/react";
 import { useCart } from "@/context/CartContext";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 
 import {
   MenuContent,
@@ -198,9 +199,7 @@ export default function Nav() {
             <Link href="/members">
               <MenuItem value="members">會員</MenuItem>
             </Link>
-            <Link href="/shoppingCart">
-              <MenuItem value="shoppingCart">購物車</MenuItem>
-            </Link>
+
             {session ? (
               <div>
                 <MenuItem value="demo" onClick={handleSignOut}>
@@ -218,6 +217,26 @@ export default function Nav() {
               </div>
             ) : null}
           </MenuContent>
+          <Link href="/shoppingCart">
+            <Box position="relative">
+              <Flex w={9} h={9} justify="center" align="center" pl={2}>
+                <AiOutlineShoppingCart size="2rem" color="black" />
+                <Box
+                  position="absolute"
+                  top="0"
+                  right="0"
+                  transform="translate(50%, -50%)"
+                  bg="none"
+                >
+                  <Float>
+                    <Circle size="5" bg="white" color="grey">
+                      {cartItems.length}
+                    </Circle>
+                  </Float>
+                </Box>
+              </Flex>
+            </Box>
+          </Link>
         </Flex>
       </MenuRoot>
     </Box>

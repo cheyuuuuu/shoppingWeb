@@ -30,12 +30,16 @@ export default function Home() {
             <Text textStyle="7xl">找到</Text>
           </div>
         </Flex>
-        <Flex justifyContent="center" wrap="wrap">
+        <Flex
+          justifyContent="center"
+          wrap="wrap"
+          direction={{ base: "column", md: "row" }}
+        >
           <Box className="slideDown">
             <Text textStyle="7xl">你喜歡的</Text>
           </Box>
           <Box className="pulse">
-            <Text textStyle="7xl" color="black">
+            <Text textStyle="7xl" color="black" textAlign="center">
               商品
             </Text>
           </Box>

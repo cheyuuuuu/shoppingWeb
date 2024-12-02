@@ -8,13 +8,14 @@ const fs = require("fs");
 const multer = require("multer");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const User = require("./models/User");
 const Commodity = require("./models/commodity");
 const Order = require("./models/order");
 const { url } = require("inspector");
 const { error } = require("console");
 const app = express();
+require("dotenv").config();
 
 const saltRounds = 10;
 
@@ -34,7 +35,7 @@ app.set("view engine", "jade");
 app.use(logger("dev"));
 app.use(
   cors({
-    origin: "http://localhost:3000", // 或使用環境變數來設置 URL
+    origin: process.env.LocalHostURL, // 或使用環境變數來設置 URL
     credentials: true, // 如果需要包含 cookie，啟用這個選項
   })
 );

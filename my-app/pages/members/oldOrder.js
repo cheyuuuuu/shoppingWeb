@@ -41,7 +41,7 @@ export default function OldOrder() {
           <MemberSideBar />
         </Box>
         <Box w="90%" h="100%" p={3} overflowY="auto">
-          <Stack gap="10" m={5}>
+          <Stack gap="10" m={5} overflowX="auto" maxW="100%">
             <For each={["outline"]}>
               {(variant) => (
                 <Table.Root

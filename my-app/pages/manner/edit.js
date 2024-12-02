@@ -136,7 +136,7 @@ export default function Edit() {
         <Box w="10%" h="100%" p={3} borderRadius="md" bg="gray">
           <SideBar></SideBar>
         </Box>
-        <Box w="90%" h="100%" p={3}>
+        <Box w="90%" h="100%" p={3} overflowX="auto" maxW="100%">
           <Stack gap="10" m={5}>
             <For each={["outline"]}>
               {(variant) => (

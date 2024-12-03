@@ -106,7 +106,7 @@ export default function CommoditiesType() {
                   bg={"gray"}
                 >
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_BASE_URL}${commodity.image.url}`}
+                    src={`/api${commodity.image.url}`}
                     alt={commodity.name}
                     height="150px"
                     width={200}

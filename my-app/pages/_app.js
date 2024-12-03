@@ -5,7 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 import { CartProvider } from "@/context/CartContext";
 import "../public/styles/wickedcss.min.css";
-import "normalize.css";
+
 
 export default function App({
   Component,

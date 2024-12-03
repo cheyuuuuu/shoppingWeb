@@ -27,6 +27,7 @@ export default function Order() {
     tel: "",
     payment: "",
   });
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -36,6 +37,10 @@ export default function Order() {
   const userEmail = session?.user?.email;
   let totalPrice = 0;
   const payment = ["超商貨到付款", "匯款/轉帳"];
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   //獲取商品資料
   useEffect(() => {
@@ -146,6 +151,11 @@ export default function Order() {
       insetStart: "2",
     },
   });
+
+  if (!isClient) {
+    return null; // 或者返回 loading 狀態
+  }
+
   if (cartItems.length === 0) {
     router.push("/commodity");
     return <div>購物車是空的</div>;

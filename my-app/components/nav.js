@@ -124,17 +124,7 @@ export default function Nav() {
                 </Box>
               </Tabs.Trigger>
             </Link>
-            <Link href="/demo">
-              <Tabs.Trigger
-                value="demo"
-                padding="3"
-                textStyle="xl"
-                {...tabStyles}
-              >
-                <FaShoppingCart />
-                測試
-              </Tabs.Trigger>
-            </Link>
+
             <Tabs.Indicator rounded="l3" />
             {session ? (
               <div>

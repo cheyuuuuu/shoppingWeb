@@ -54,8 +54,8 @@ export default function Register() {
     if (response.ok) {
       console.log("用戶創建成功:", data);
       setUser({ name: "", email: "", password: "", role: "user" });
-      alert("註冊成功！按下確認跳轉至首頁");
-      router.push("/");
+      alert("註冊成功！按下確認跳轉至會員頁面");
+      router.push("/member");
     } else {
       console.error("錯誤:", data);
       alert(data.message + "！");

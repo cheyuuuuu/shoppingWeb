@@ -36,6 +36,10 @@ export default NextAuth({
     }),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // 確保重定向到正確的網域
+      return url.startsWith(baseUrl) ? url : baseUrl;
+    },
     async jwt({ token, user }) {
       // 確認 JWT 回調時是否有 user 物件
 
@@ -63,7 +67,7 @@ export default NextAuth({
       return session;
     },
   },
-
+  site: process.env.NEXTAUTH_URL,
   // 如果需要將使用者的資料儲存在資料庫中，可以在 database 這個參數加上 url
   // database: process.env.DATABASE_URL,
 });

@@ -9,6 +9,7 @@ import styles from "./Nav.module.css";
 import { useSession, signOut } from "next-auth/react";
 import { useCart } from "@/context/CartContext";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { useEffect } from "react";
 
 import {
   MenuContent,
@@ -20,7 +21,13 @@ import {
 export default function Nav() {
   const { data: session } = useSession();
   const router = useRouter();
-  const { cartItems } = useCart();
+  const { cartItems, clearCart } = useCart();
+
+  useEffect(() => {
+    if (!session) {
+      clearCart();
+    }
+  }, [session]);
 
   //設定對應路徑的tab value
   const pathToValueMap = {
@@ -220,7 +227,7 @@ export default function Nav() {
                 >
                   <Float>
                     <Circle size="5" bg="white" color="grey">
-                      {cartItems.length}
+                      {session ? cartItems.length : 0}
                     </Circle>
                   </Float>
                 </Box>

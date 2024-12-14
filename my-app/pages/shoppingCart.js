@@ -48,6 +48,7 @@ export default function ShoppingCart() {
             const checkData = await checkResponse.json();
             validCartItems.splice(i, 1);
             hasInvalidItems = true;
+            0;
             i--;
           } else {
             commodityDetails[item.commodityId] = data;

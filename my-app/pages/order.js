@@ -107,7 +107,7 @@ export default function Order() {
         //清空前端購物車
         await clearCart();
         alert("訂單建立成功！");
-        await router.push("/orderComplete");
+        router.push("/orderComplete");
       } else {
         console.error("錯誤:", data.error);
         alert(data.error + "！");
@@ -156,7 +156,7 @@ export default function Order() {
   }
 
   if (cartItems.length === 0) {
-    router.push("/commodity");
+    // router.push("/commodity");
     return <div>購物車是空的</div>;
   }
 
